@@ -1,0 +1,19 @@
+elasticsearch_user: elk
+elasticsearch_group: elk
+elasticsearch_extract_dir: /opt
+elasticsearch_data_dir: /elasticsearch/data
+elasticsearch_log_dir: /var/log/elasticsearch
+elasticsearch_pid_dir: /var/run/elasticsearch
+elasticsearch_conf_dir: /etc/elasticsearch
+elasticsearch_certs_dir:  /etc/elasticsearch/certs
+elasticsearch_security_enabled: yes
+elasticsearch_ca_password: c4,p4sSw0rd
+elasticsearch_cert_password: cerT,P4Ssw0rD
+elasticsearch_env_file:
+  Debian: /etc/default/elasticsearch
+  RedHat: /etc/sysconfig/elasticsearch
+elasticsearch_version: 8.1.0
+elasticsearch_cluster_name: elk-cluster-test
+elasticsearch_xpack_security_enabled: no
+elasticsearch_jvm_xmx: 256m
+elasticsearch_jvm_xms: 256m

@@ -1,0 +1,18 @@
+---
+
+- name: CA exists
+  stat:
+    path: "{{ elasticsearch_certs_dir}}/elastic_ca.p12"
+  register: ca_file
+
+- name: generate elasticsearch CA
+  ansible.builtin.command: > 
+    {{ elasticsearch_extract_dir }}/elasticsearch/bin/elasticsearch-certutil 
+    ca --out {{ elasticsearch_certs_dir}}/elastic_ca.p12 
+    --pass {{ elasticsearch_ca_password }}
+  when: not ca_file.stat.exists
+
+- ansible.builtin.fetch:
+    src: "{{ elasticsearch_certs_dir}}/elastic_ca.p12"
+    dest: "{{ role_path }}/files/elastic_ca.p12"
+    flat: true

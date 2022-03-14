@@ -1,0 +1,13 @@
+---
+dependencies: []
+
+galaxy_info:
+  description: 'Setup elasticsearch cluster'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+  galaxy_tags: []

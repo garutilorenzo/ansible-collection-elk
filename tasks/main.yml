@@ -1,0 +1,22 @@
+---
+- setup:
+
+- include_tasks: 
+    file: generate_ca.yml
+    apply:
+      tags: generateca,elasticsearch
+  tags: generateca,elasticsearch
+  when: generateca is defined
+
+- include_tasks: 
+    file: keystore_setup.yml
+    apply:
+      tags: keystore,elasticsearch
+  tags: keystore,elasticsearch
+  when: elasticsearch_security_enabled
+
+- include_tasks: 
+    file: install_elasticsearch.yml
+    apply:
+      tags: install,elasticsearch
+  tags: install,elasticsearch

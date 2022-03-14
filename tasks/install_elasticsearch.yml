@@ -1,0 +1,109 @@
+---
+
+- shell: uname -s
+  register: unames
+
+- shell: uname -m
+  register: unamem
+
+- name: add elk group 
+  ansible.builtin.group:
+    name: "{{ elasticsearch_group }}"
+    state: present
+
+- name: add elk user
+  ansible.builtin.user:
+    name: "{{ elasticsearch_user }}"
+    shell: /bin/sh
+    password: "*"
+    group: "{{ elasticsearch_group }}"
+
+- name: is elk installed
+  stat:
+    path: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
+  register: elasticsearch_dir
+
+- name: Download and extract elasticsearch
+  ansible.builtin.unarchive:
+    src: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
+    dest: "{{ elasticsearch_extract_dir }}"
+    remote_src: yes
+  when: not elasticsearch_dir.stat.exists
+
+- name: Fix directory permission
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    recurse: yes
+    mode: u=rwX,g=rX,o-rwx
+  loop:
+    - "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
+    - "{{ elasticsearch_data_dir }}"
+    - "{{ elasticsearch_log_dir }}"
+    - "{{ elasticsearch_pid_dir }}"
+    - "{{ elasticsearch_conf_dir }}"
+    - "{{ elasticsearch_certs_dir}}"
+
+- include_tasks: 
+    file: generate_node_cert.yml
+  when: elasticsearch_security_enabled
+    
+- name: create symlink to elasticsearch
+  ansible.builtin.file:
+    src: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
+    dest: "{{ elasticsearch_extract_dir }}/elasticsearch"
+    state: link
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+
+- name: Set vm.max_map_count value
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: '262144'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Render elasticsearch env file
+  ansible.builtin.template:
+    src: elasticsearch_env.j2
+    dest: "{{ elasticsearch_env_file[ansible_os_family] }}"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0644
+
+- name: Render elasticsearch service file
+  ansible.builtin.template:
+    src: elasticsearch.service.j2
+    dest: /etc/systemd/system/elasticsearch.service
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: Render elasticsearch configuration file
+  ansible.builtin.template:
+    src: elasticsearch.yml.j2
+    dest: "{{ elasticsearch_conf_dir }}/elasticsearch.yml"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0644
+
+- name: Render elasticsearch JVM configuration file
+  ansible.builtin.template:
+    src: jvm.options.j2
+    dest: "{{ elasticsearch_conf_dir }}/jvm.options"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0644
+
+- name: Copy elasticsearch log4j configuration file
+  ansible.builtin.copy:
+    src: log4j2.properties
+    dest: "{{ elasticsearch_conf_dir }}/log4j2.properties"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0644
