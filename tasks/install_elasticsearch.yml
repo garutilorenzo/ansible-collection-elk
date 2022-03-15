@@ -59,6 +59,7 @@
   when: 
     - generateca is defined
     - elasticsearch_security_enabled
+    - inventory_hostname in groups['elasticsearch_ca']
 
 - include_tasks: 
     file: generate_node_cert.yml
