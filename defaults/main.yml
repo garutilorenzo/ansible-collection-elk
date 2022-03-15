@@ -17,7 +17,6 @@ elasticsearch_env_file:
   RedHat: /etc/sysconfig/elasticsearch
 elasticsearch_version: 8.1.0
 elasticsearch_cluster_name: elk-cluster-test
-elasticsearch_xpack_security_enabled: no
 elasticsearch_jvm_xmx: 256m
 elasticsearch_jvm_xms: 256m
 elasticsearch_subnet: 192.168.25.0/24
