@@ -26,6 +26,7 @@ This role accept the following variables:
 | `elasticsearch_pid_dir`             | `/var/run/elasticsearch`       | Elasticsearch pid dir |
 | `elasticsearch_conf_dir`            | `/etc/elasticsearch`       | Elasticsearch conf dir  |
 | `elasticsearch_certs_dir`           | `/etc/elasticsearch/certs`       | Elasticsearch certificate dir  |
+| `elasticsearch_local_certs_dir`     | `~/very_secure_dir`        | Local directory where to store the Elasticsearch certificates |
 | `elasticsearch_security_enabled`    | `yes`       | Enable or not the [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html)  |
 | `elasticsearch_ca_password`         | `c4,p4sSw0rd`       | CA password. **CHANGE** this value, is only an example password.  |
 | `elasticsearch_ca_filename`         | `elastic_ca.p12`       | CA filename  |
@@ -71,6 +72,13 @@ elasticsearch_master
 
 ### How to use this role
 
+If you want to generate the CA, first create on the host where ansible is running the directory *elasticsearch_local_certs_dir*:
+
+```
+mkdir ~/very_secure_dir
+```
+
+run ansible:
 
 ```
 ansible-playbook site.yml -i hosts.ini

@@ -14,5 +14,5 @@
 
 - ansible.builtin.fetch:
     src: "{{ elasticsearch_certs_dir}}/{{ elasticsearch_ca_filename }}"
-    dest: "{{ role_path }}/files/{{ elasticsearch_ca_filename }}"
+    dest: "{{ elasticsearch_local_certs_dir }}/{{ elasticsearch_ca_filename }}"
     flat: true

@@ -7,7 +7,7 @@
 
 - name: Copy elasticsearch CA
   ansible.builtin.copy:
-    src: "{{ elasticsearch_ca_filename }}"
+    src: "{{ elasticsearch_local_certs_dir }}/{{ elasticsearch_ca_filename }}"
     dest: "{{ elasticsearch_certs_dir }}/{{ elasticsearch_ca_filename }}"
     owner: "{{ elasticsearch_user }}"
     group: "{{ elasticsearch_group }}"
