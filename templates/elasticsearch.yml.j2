@@ -54,6 +54,7 @@ path.logs: {{ elasticsearch_log_dir }}
 # address here to expose this node on the network:
 #
 network.host: 0.0.0.0
+network.publish_host: {{ elastic_ip_address }}
 #
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
@@ -67,7 +68,19 @@ http.port: 9200
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
+{% if groups['elasticsearch'] | length > 1  %}
+discovery.type: "multi-node"
+discovery.seed_hosts:
+{% for host in groups['elasticsearch'] %}
+  - {{ host }}
+{% endfor %}
+cluster.initial_master_nodes:
+{% for host in groups['elasticsearch'] %}
+  - {{ host }}
+{% endfor %}
+{% else %}
 discovery.type: "single-node"
+{% endif %}
 #discovery.seed_hosts: ["host1", "host2"]
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
@@ -88,8 +101,8 @@ discovery.type: "single-node"
 xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate 
 xpack.security.transport.ssl.client_authentication: required
-xpack.security.transport.ssl.keystore.path: {{ elasticsearch_certs_dir }}/elastic_keystore.p12
-xpack.security.transport.ssl.truststore.path: {{ elasticsearch_certs_dir }}/elastic_keystore.p12
+xpack.security.transport.ssl.keystore.path: {{ elasticsearch_certs_dir }}/{{ elasticsearch_cert_filename }}
+xpack.security.transport.ssl.truststore.path: {{ elasticsearch_certs_dir }}/{{ elasticsearch_cert_filename }}
 {% else %}
 xpack.security.enabled: false
 xpack.security.transport.ssl.enabled: false

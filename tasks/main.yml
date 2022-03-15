@@ -2,6 +2,16 @@
 - setup:
 
 - include_tasks: 
+    file: preflight.yml
+
+- include_tasks: 
+    file: setup_hosts.yml
+    apply:
+      tags: hosts,elasticsearch
+  tags: hosts,elasticsearch
+  when: elasticsearch_resolv_mode == 'hosts'
+
+- include_tasks: 
     file: generate_ca.yml
     apply:
       tags: generateca,elasticsearch
