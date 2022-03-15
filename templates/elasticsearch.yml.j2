@@ -107,3 +107,8 @@ xpack.security.transport.ssl.truststore.path: {{ elasticsearch_certs_dir }}/{{ e
 xpack.security.enabled: false
 xpack.security.transport.ssl.enabled: false
 {% endif %}
+
+{% if elasticsearch_https_enabled %}
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: {{ elasticsearch_certs_dir }}/http.p12
+{% endif %}

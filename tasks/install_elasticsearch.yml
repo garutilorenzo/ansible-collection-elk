@@ -66,6 +66,10 @@
   when: elasticsearch_security_enabled
 
 - include_tasks: 
+    file: generate_https_cert.yml
+  when: elasticsearch_https_enabled
+
+- include_tasks: 
     file: keystore_setup.yml
   when: elasticsearch_security_enabled
 

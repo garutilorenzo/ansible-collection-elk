@@ -1,0 +1,58 @@
+---
+
+- name: generate HTTPS answer file
+  ansible.builtin.template:
+    src: https_answer_file.txt.j2
+    dest: /tmp/https_answer_file.txt
+    mode: 0400
+  when: not https_file.stat.exists
+
+- name: generate HTTPS cert script
+  ansible.builtin.template:
+    src: generate_https_certs.sh.j2
+    dest: "/usr/local/sbin/generate_https_certs.sh"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0700
+
+- name: generate HTTPS cert
+  ansible.builtin.command: > 
+    /usr/local/sbin/generate_https_certs.sh
+  when: not https_file.stat.exists
+
+- name: Remove answer file
+  ansible.builtin.file:
+    path: /tmp/https_answer_file.txt
+    state: absent
+
+- name: Unarchive HTTPS zip file
+  ansible.builtin.unarchive:
+    src: "{{ elasticsearch_http_file }}"
+    dest: /tmp/
+    remote_src: yes
+  when: not https_file.stat.exists
+
+- name: Copy http.p12 file in cert dir
+  ansible.builtin.copy:
+    src: /tmp/elasticsearch/http.p12
+    dest: "{{ elasticsearch_certs_dir }}/http.p12"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    remote_src: yes
+
+- ansible.builtin.fetch:
+    src:  /tmp/kibana/elasticsearch-ca.pem
+    dest: "{{ elasticsearch_local_certs_dir }}/elasticsearch-ca.pem"
+    flat: true
+  run_once: true
+  when: not https_file.stat.exists
+
+- name: Remove HTTPS zip file
+  ansible.builtin.file:
+    path: "{{ elasticsearch_http_file }}"
+    state: absent
+
+- name: Remove HTTPS temp dir
+  ansible.builtin.file:
+    path: /tmp/elasticsearch
+    state: absent

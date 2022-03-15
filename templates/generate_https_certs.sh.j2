@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export ES_HOME={{ elasticsearch_extract_dir }}/elasticsearch
+export ES_PATH_CONF={{ elasticsearch_conf_dir }}
+
+HTTPS_P12_FILE={{ elasticsearch_certs_dir}}/http.p12
+
+if [ ! -f $HTTPS_P12_FILE ]; then
+    cat /tmp/https_answer_file.txt | {{ elasticsearch_extract_dir }}/elasticsearch/bin/elasticsearch-certutil http
+fi
+

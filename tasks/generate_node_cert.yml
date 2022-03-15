@@ -19,6 +19,11 @@
     path: "{{ elasticsearch_certs_dir}}/{{ elasticsearch_cert_filename }}"
   register: cert_file
 
+- name: cert HTTPS exists
+  stat:
+    path: "{{ elasticsearch_certs_dir}}/http.p12"
+  register: https_file
+
 - name: generate node cert
   ansible.builtin.command: > 
     {{ elasticsearch_extract_dir }}/elasticsearch/bin/elasticsearch-certutil

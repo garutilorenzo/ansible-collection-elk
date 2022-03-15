@@ -8,10 +8,13 @@ elasticsearch_conf_dir: /etc/elasticsearch
 elasticsearch_certs_dir:  /etc/elasticsearch/certs
 elasticsearch_local_certs_dir: ~/very_secure_dir
 elasticsearch_security_enabled: yes
+elasticsearch_https_enabled: yes
 elasticsearch_ca_password: c4,p4sSw0rd
 elasticsearch_ca_filename: elastic_ca.p12
 elasticsearch_cert_password: cerT,P4Ssw0rD
 elasticsearch_cert_filename: elastic_keystore.p12
+elasticsearch_http_password: htTp4sS2o3d
+elasticsearch_http_file: /tmp/elasticsearch-ssl-http.zip
 elasticsearch_bootstrap_password: changeme
 elasticsearch_env_file:
   Debian: /etc/default/elasticsearch

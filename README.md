@@ -28,10 +28,13 @@ This role accept the following variables:
 | `elasticsearch_certs_dir`           | `/etc/elasticsearch/certs`       | Elasticsearch certificate dir  |
 | `elasticsearch_local_certs_dir`     | `~/very_secure_dir`        | Local directory where to store the Elasticsearch certificates |
 | `elasticsearch_security_enabled`    | `yes`       | Enable or not the [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html)  |
+| `elasticsearch_https_enabled`    | `yes`       | Enable or not the Elasticsearch security [plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html)  |
 | `elasticsearch_ca_password`         | `c4,p4sSw0rd`       | CA password. **CHANGE** this value, is only an example password.  |
 | `elasticsearch_ca_filename`         | `elastic_ca.p12`       | CA filename  |
 | `elasticsearch_cert_password`       | `cerT,P4Ssw0rD`       | Certificate password. **CHANGE** this value, is only an example password.  |
 | `elasticsearch_cert_filename`       | `elastic_keystore.p12`       | Certificate filename |
+| `elasticsearch_http_password`       | `htTp4sS2o3d`       | HTTPS certificate password. **CHANGE** this value, is only an example password.  |
+| `elasticsearch_http_file`       | `/tmp/elasticsearch-ssl-http.zip`       | Output file for the HTTPS certificate generation script |
 | `elasticsearch_bootstrap_password`  | `changeme`       | Elasticsearch [bootstrap password](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#bootstrap-elastic-passwords).  **CHANGE** this value, follow [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#set-built-in-user-passwords) instructions  |
 | `elasticsearch_env_file`            | `dict`       | Yaml dict, see defaults.yaml. Specify env path based on the Linux distribution  |
 | `elasticsearch_version`             | `8.1.0`       | Elasticsearch version  |
