@@ -4,10 +4,6 @@
 
 TBD
 
-### TODO
-
-Remove discovery.type: "single-node" from elasticsearch configuration
-
 ### How to use
 
 Generate certs:
