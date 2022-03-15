@@ -47,9 +47,19 @@
     - "{{ elasticsearch_certs_dir}}"
 
 - include_tasks: 
+    file: generate_ca.yml
+  when: 
+    - generateca is defined
+    - elasticsearch_security_enabled
+
+- include_tasks: 
     file: generate_node_cert.yml
   when: elasticsearch_security_enabled
-    
+
+- include_tasks: 
+    file: keystore_setup.yml
+  when: elasticsearch_security_enabled
+
 - name: create symlink to elasticsearch
   ansible.builtin.file:
     src: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
