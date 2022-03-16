@@ -27,6 +27,8 @@
   ansible.builtin.unarchive:
     src: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
     dest: "{{ elasticsearch_extract_dir }}"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
     remote_src: yes
   when: not elasticsearch_dir.stat.exists
 

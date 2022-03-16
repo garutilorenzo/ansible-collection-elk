@@ -1,5 +1,10 @@
 ---
 
+- name: Install unzip
+  ansible.builtin.package:
+    name: unzip
+    state: present
+
 - set_fact:
     virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 

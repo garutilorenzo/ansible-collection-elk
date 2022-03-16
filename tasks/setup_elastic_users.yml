@@ -16,3 +16,4 @@
     body_format: json
   with_items: "{{ elasticsearch_users }}"
   no_log: true
+  run_once: true

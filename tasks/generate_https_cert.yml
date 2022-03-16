@@ -11,9 +11,17 @@
   ansible.builtin.template:
     src: generate_https_certs.sh.j2
     dest: "/usr/local/sbin/generate_https_certs.sh"
-    owner: "{{ elasticsearch_user }}"
-    group: "{{ elasticsearch_group }}"
     mode: 0700
+
+- name: Remove HTTPS zip file (cleanup)
+  ansible.builtin.file:
+    path: "{{ elasticsearch_http_file }}"
+    state: absent
+
+- name: Remove HTTPS temp dir (cleanup)
+  ansible.builtin.file:
+    path: /tmp/elasticsearch
+    state: absent
 
 - name: generate HTTPS cert
   ansible.builtin.command: > 
@@ -39,6 +47,7 @@
     owner: "{{ elasticsearch_user }}"
     group: "{{ elasticsearch_group }}"
     remote_src: yes
+  when: not https_file.stat.exists
 
 - ansible.builtin.fetch:
     src:  /tmp/kibana/elasticsearch-ca.pem
