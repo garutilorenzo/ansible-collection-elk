@@ -1,0 +1,18 @@
+---
+
+- set_fact:
+    virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- name: Setup ELK users
+  ansible.builtin.uri:
+    url: "{{ virtual_proto }}://localhost:9200/_security/user/{{ item.username }}/_password"
+    user: elastic
+    password: "{{ elasticsearch_bootstrap_password }}"
+    method: POST
+    body: {"password" : "{{ item.password }}"} 
+    force_basic_auth: yes
+    validate_certs: no
+    status_code: 200
+    body_format: json
+  with_items: "{{ elasticsearch_users }}"
+  no_log: true

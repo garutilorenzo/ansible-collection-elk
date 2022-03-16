@@ -1,6 +1,9 @@
 ---
 
 - set_fact:
+    virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- set_fact:
     elastic_ip_address: "{{ item }}"
   when: "item | ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_all_ipv4_addresses }}"

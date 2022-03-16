@@ -7,12 +7,24 @@
 - include_tasks: 
     file: setup_hosts.yml
     apply:
-      tags: hosts,elasticsearch
-  tags: hosts,elasticsearch
+      tags: elkhosts,elasticsearch
+  tags: elkhosts,elasticsearch
   when: elasticsearch_resolv_mode == 'hosts'
 
 - include_tasks: 
     file: install_elasticsearch.yml
     apply:
-      tags: install,elasticsearch
-  tags: install,elasticsearch
+      tags: elkinstall,elasticsearch
+  tags: elkinstall,elasticsearch
+
+- include_tasks: 
+    file: enable_elasticsearch.yml
+    apply:
+      tags: elkenable,elasticsearch
+  tags: elkenable,elasticsearch
+
+- include_tasks: 
+    file: setup_elastic_users.yml
+    apply:
+      tags: elkusers,elasticsearch
+  tags: elkusers,elasticsearch

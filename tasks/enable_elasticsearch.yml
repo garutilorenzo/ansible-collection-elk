@@ -1,0 +1,24 @@
+---
+
+- set_fact:
+    virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- name: enable and start elasticsearch
+  ansible.builtin.systemd:
+    name: elasticsearch 
+    state: started 
+    enabled: yes
+
+- name: wait elasticsearh to be ready
+  ansible.builtin.uri:
+    url: "{{ virtual_proto }}://localhost:9200"
+    status_code: 200
+    user: elastic
+    password: "{{ elasticsearch_bootstrap_password }}"
+    method: GET
+    force_basic_auth: yes
+    validate_certs: no
+  register: result
+  until: result.status == 200
+  retries: 30
+  delay: 20

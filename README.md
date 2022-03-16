@@ -36,13 +36,14 @@ This role accept the following variables:
 | `elasticsearch_http_password`       | `htTp4sS2o3d`       | HTTPS certificate password. **CHANGE** this value, is only an example password.  |
 | `elasticsearch_http_file`       | `/tmp/elasticsearch-ssl-http.zip`       | Output file for the HTTPS certificate generation script |
 | `elasticsearch_bootstrap_password`  | `changeme`       | Elasticsearch [bootstrap password](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#bootstrap-elastic-passwords).  **CHANGE** this value, follow [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#set-built-in-user-passwords) instructions  |
-| `elasticsearch_env_file`            | `dict`       | Yaml dict, see defaults.yaml. Specify env path based on the Linux distribution  |
 | `elasticsearch_version`             | `8.1.0`       | Elasticsearch version  |
 | `elasticsearch_cluster_name`        | `elk-cluster-test`       | Elasticsearch cluster name  |
 | `elasticsearch_jvm_xmx`             | `256m`       | JVM XMX memory  |
 | `elasticsearch_jvm_xms`             | `256m`       | JVM XMS memory  |
 | `elasticsearch_subnet`              | `192.168.25.0/24`       | **CHANGE** this value based on your needs. This value is used to determinate the network interface to use if the machine has multiple network interfaces (Eg. Vagrant) |
 | `elasticsearch_resolv_mode`         | `dns`       | How the elastic resolve the names, default dns. If set to host the /etc/hosts file will be overwritten  |
+| `elasticsearch_users`         | `list()`       | List of dict. List of user with password. This role will set the default password for each user in this list. You can also use [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-passwords.html) tool to generate random password  |
+
 
 ### Role extra variables
 

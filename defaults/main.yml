@@ -16,13 +16,24 @@ elasticsearch_cert_filename: elastic_keystore.p12
 elasticsearch_http_password: htTp4sS2o3d
 elasticsearch_http_file: /tmp/elasticsearch-ssl-http.zip
 elasticsearch_bootstrap_password: changeme
-elasticsearch_env_file:
-  Debian: /etc/default/elasticsearch
-  RedHat: /etc/sysconfig/elasticsearch
 elasticsearch_version: 8.1.0
 elasticsearch_cluster_name: elk-cluster-test
 elasticsearch_jvm_xmx: 256m
 elasticsearch_jvm_xms: 256m
 elasticsearch_subnet: 192.168.25.0/24
+
+elasticsearch_users:
+  - username: beats_system
+    password: beats_p4ssword
+  - username: apm_system
+    password: aPmP4ssW0rd
+  - username: kibana
+    password: K1b4nap4sSw0rd
+  - username: kibana_system
+    password: K1b4nap4sSw0rd
+  - username: logstash_system
+    password: l0gst4sHpAssw0rd,
+  - username: remote_monitoring_user
+    password: Rem0t3.Mon1t0ringU
 
 elasticsearch_resolv_mode: dns # hosts
