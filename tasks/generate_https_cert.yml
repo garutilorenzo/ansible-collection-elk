@@ -23,6 +23,11 @@
     path: /tmp/elasticsearch
     state: absent
 
+- name: Remove HTTPS temp dir (cleanup)
+  ansible.builtin.file:
+    path: /tmp/kibana
+    state: absent
+
 - name: generate HTTPS cert
   ansible.builtin.command: > 
     /usr/local/sbin/generate_https_certs.sh
@@ -64,4 +69,9 @@
 - name: Remove HTTPS temp dir
   ansible.builtin.file:
     path: /tmp/elasticsearch
+    state: absent
+
+- name: Remove HTTPS temp dir
+  ansible.builtin.file:
+    path: /tmp/kibana
     state: absent
