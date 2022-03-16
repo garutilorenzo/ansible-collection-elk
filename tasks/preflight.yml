@@ -1,9 +1,13 @@
 ---
 
-- name: Install unzip
+- name: Install utils
   ansible.builtin.package:
-    name: unzip
+    name: "{{ item }}"
     state: present
+    update_cache: yes
+  loop:
+    - jq
+    - unzip
 
 - set_fact:
     virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
