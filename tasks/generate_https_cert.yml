@@ -1,5 +1,10 @@
 ---
 
+- name: cert HTTPS exists
+  stat:
+    path: "{{ elasticsearch_certs_dir}}/http.p12"
+  register: https_file
+
 - name: generate HTTPS answer file
   ansible.builtin.template:
     src: https_answer_file.txt.j2
