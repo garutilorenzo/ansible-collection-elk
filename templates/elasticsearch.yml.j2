@@ -75,7 +75,7 @@ discovery.seed_hosts:
   - {{ host }}
 {% endfor %}
 cluster.initial_master_nodes:
-{% for host in groups['elasticsearch'] %}
+{% for host in groups['elasticsearch_master'] %}
   - {{ host }}
 {% endfor %}
 {% else %}
