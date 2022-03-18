@@ -99,7 +99,7 @@
     - reload systemd
 
 - set_fact:
-    setup_params: "{{ '--index-management --pipelines' if setup_kibana_dashboards else '--pipelines --index-management' }}"
+    setup_params: "{{ '--index-management' if setup_kibana_dashboards else '--index-management' }}"
 
 - name: heartbeat setup
   ansible.builtin.command: > 
