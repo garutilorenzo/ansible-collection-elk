@@ -5,6 +5,7 @@ Setup and configure Kibana
 ### Role variables
 
 | Var   | Default | Desc |
+| ------- | ------- | ----------- |
 | `kibana_user`                | `elk`       | Kibana system user  |
 | `kibana_group`               | `elk`       | Group of the kibana search system user  |
 | `kibana_extract_dir`         | `/opt`       | Kibana search extract dir   |

@@ -5,6 +5,7 @@ Setup and configure elastic Beats
 ### Role variables
 
 | Var                              | Default     | Desc |
+| ------- | ------- | ----------- |
 | `beats_user`                     | `elk`       | Beats system user  |
 | `beats_group`                    | `elk`       | Group of the beats search system user  |
 | `beats_extract_dir`              | `/opt`       | Beats extract dir   |
