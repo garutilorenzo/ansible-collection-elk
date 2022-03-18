@@ -1,0 +1,12 @@
+# Module: beat-xpack
+# Docs: https://www.elastic.co/guide/en/beats/heartbeat/current/monitoring-metricbeat-collection.html
+
+- module: beat
+  metricsets:
+    - stats
+    - state
+  period: 10s
+  hosts: ["http://localhost:5066"]
+  #username: "user"
+  #password: "secret"
+  xpack.enabled: true

@@ -1,0 +1,127 @@
+---
+
+- name: CA exists
+  stat:
+    path: "{{ metricbeat_certs_dir }}/{{ elasticsearch_ca_name }}"
+  register: elastic_ca_file
+
+- shell: uname -s
+  register: unames
+
+- shell: uname -m
+  register: unamem
+
+- name: is metricbeat installed
+  stat:
+    path: "{{ beats_extract_dir }}/metricbeat-{{ beats_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}"
+  register: metricbeat_dir
+
+- name: Download and extract metricbeat
+  ansible.builtin.unarchive:
+    src: https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-{{ beats_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
+    dest: "{{ beats_extract_dir }}"
+    owner: "{{ beats_user }}"
+    group: "{{ beats_group }}"
+    remote_src: yes
+  when: not metricbeat_dir.stat.exists
+
+- name: create symlink to metricbeat
+  ansible.builtin.file:
+    src: "{{ beats_extract_dir }}/metricbeat-{{ beats_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}"
+    dest: "{{ beats_extract_dir }}/metricbeat"
+    state: link
+    owner: "{{ beats_user }}"
+    group: "{{ beats_group }}"
+
+- name: Fix directory permission
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ beats_user }}"
+    group: "{{ beats_group }}"
+    recurse: yes
+    mode: u=rwX,g=rX,o-rwx
+  loop:
+    - "{{ metricbeat_conf_dir }}"
+    - "{{ metricbeat_data_dir }}"
+    - "{{ metricbeat_log_dir }}"
+    - "{{ metricbeat_certs_dir }}"
+
+- name: Copy modules.d directory
+  ansible.posix.synchronize:
+    src: "{{ beats_extract_dir }}/metricbeat/modules.d"
+    dest: "{{ metricbeat_conf_dir }}/"
+    owner: yes
+    group: yes
+  delegate_to: "{{ inventory_hostname }}"
+
+- set_fact:
+    elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- name: Copy elastic CA
+  ansible.builtin.copy:
+    src: "{{ elasticsearch_local_certs_dir }}/{{ elasticsearch_ca_name }}"
+    dest: "{{ metricbeat_certs_dir }}/{{ elasticsearch_ca_name }}"
+    owner: "{{ beats_user }}"
+    group: "{{ beats_group }}"
+    mode: 0644
+  when: 
+    - elasticsearch_https_enabled
+    - not elastic_ca_file.stat.exists
+
+
+- ansible.builtin.fail:
+    msg: no elasticsearch_hosts specified
+  when:
+    - elasticsearch_hosts | length == 0
+
+- ansible.builtin.fail:
+    msg: setup_kibana_dashboards set to true but no kibana_url specified
+  when:
+    - setup_kibana_dashboards
+    - kibana_url == ''
+
+- name: Render metricbeat configuration file
+  ansible.builtin.template:
+    src: metricbeat/metricbeat.yml.j2
+    dest: "{{ metricbeat_conf_dir }}/metricbeat.yml"
+    owner: "{{ beats_user }}"
+    group: "{{ beats_group }}"
+    mode: 0640
+  notify:
+    - reload metricbeat
+
+#TODO
+# - name: Render metricbeat elasticsearch module file
+#   ansible.builtin.template:
+#     src: metricbeat/elasticsearch_module.yml.j2
+#     dest: "{{ metricbeat_conf_dir }}/modules.d/elasticsearch.yml"
+#     owner: "{{ beats_user }}"
+#     group: "{{ beats_group }}"
+#     mode: 0640
+#   notify:
+#     - reload metricbeat
+#   when: elasticsearch_monitoring_enabled
+
+- name: Render metricbeat service file
+  ansible.builtin.template:
+    src: metricbeat/metricbeat.service.j2
+    dest: /etc/systemd/system/metricbeat.service
+    mode: 0644
+  notify:
+    - reload systemd
+
+- set_fact:
+    setup_params: "{{ '--dashboards --index-management --pipelines' if setup_kibana_dashboards else '--pipelines --index-management' }}"
+
+- name: metricbeat setup
+  ansible.builtin.command: > 
+    su - {{ beats_user }} -c "{{ beats_extract_dir }}/metricbeat/metricbeat -c {{ metricbeat_conf_dir }}/metricbeat.yml setup -e {{ setup_params }}"
+  run_once: true
+  when: not metricbeat_dir.stat.exists
+
+- name: enable and start metricbeat
+  ansible.builtin.systemd:
+    name: metricbeat 
+    state: started 
+    enabled: yes

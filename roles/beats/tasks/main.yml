@@ -1,0 +1,25 @@
+---
+
+- include_tasks: 
+    file: setup_user.yml
+    apply:
+      tags: elkuser,beats
+  tags: elkuser,beats
+
+- include_tasks: 
+    file: install_filebeat.yml
+    apply:
+      tags: filebeat,beats
+  tags: filebeat,beats
+
+- include_tasks: 
+    file: install_metricbeat.yml
+    apply:
+      tags: metricbeat,beats
+  tags: metricbeat,beats
+
+- include_tasks: 
+    file: install_heartbeat.yml
+    apply:
+      tags: heartbeat,beats
+  tags: heartbeat,beats

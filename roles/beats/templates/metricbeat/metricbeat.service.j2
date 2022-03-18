@@ -1,0 +1,22 @@
+[Unit]
+Description=Metricbeat
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=metricbeat
+WorkingDirectory={{ beats_extract_dir }}/metricbeat
+
+User={{ beats_user }}
+Group={{ beats_group }}
+
+ExecStart={{ beats_extract_dir }}/metricbeat/metricbeat -c {{ metricbeat_conf_dir }}/metricbeat.yml
+
+StandardOutput=append:{{ metricbeat_log_dir }}/metricbeat_systemd.log
+StandardError=append:{{ metricbeat_log_dir }}/metricbeat_systemd_error.log
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

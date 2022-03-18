@@ -1,0 +1,13 @@
+---
+
+- include_tasks: 
+    file: install_kibana.yml
+    apply:
+      tags: elkinstall,kibana
+  tags: elkinstall,kibana
+
+- include_tasks: 
+    file: enable_kibana.yml
+    apply:
+      tags: elkenable,kibana
+  tags: elkenable,kibana

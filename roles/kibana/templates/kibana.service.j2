@@ -1,0 +1,23 @@
+[Unit]
+Description=Kibana
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=kibana
+Environment="KBN_PATH_CONF={{ kibana_conf_dir }}"
+WorkingDirectory={{ kibana_extract_dir }}/kibana
+
+User={{ kibana_user }}
+Group={{ kibana_group }}
+
+ExecStart={{ kibana_extract_dir }}/kibana/bin/kibana
+
+StandardOutput=append:{{ kibana_log_dir }}/kibana.log
+StandardError=append:{{ kibana_log_dir }}/kibana_error.log
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

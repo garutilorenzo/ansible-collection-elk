@@ -1,0 +1,120 @@
+---
+
+- name: CA exists
+  stat:
+    path: "{{ kibana_certs_dir }}/{{ elasticsearch_ca_name }}"
+  register: elastic_ca_file
+
+- shell: uname -s
+  register: unames
+
+- shell: uname -m
+  register: unamem
+
+- name: add elk group 
+  ansible.builtin.group:
+    name: "{{ kibana_group }}"
+    state: present
+
+- name: add elk user
+  ansible.builtin.user:
+    name: "{{ kibana_user }}"
+    shell: /bin/sh
+    password: "*"
+    group: "{{ kibana_group }}"
+
+- name: is kibana installed
+  stat:
+    path: "{{ kibana_extract_dir }}/kibana-{{ kibana_version }}"
+  register: kibana_dir
+
+- name: Download and extract kibana
+  ansible.builtin.unarchive:
+    src: https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
+    dest: "{{ kibana_extract_dir }}"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    remote_src: yes
+  when: 
+    - not kibana_dir.stat.exists
+    - kibana_install_mode == 'http'
+
+- ansible.builtin.fail:
+    msg: elasticsearch_install_mode set to local but no elasticsearch_local_tar_path specified
+  when:
+    - not kibana_dir.stat.exists
+    - kibana_install_mode == 'local'
+    - kibana_local_tar_path == ''
+
+- name: Extract kibana
+  ansible.builtin.unarchive:
+    src: "{{ kibana_local_tar_path }}/kibana-{{ kibana_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz"
+    dest: "{{ kibana_extract_dir }}"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+  when: 
+    - not kibana_dir.stat.exists
+    - kibana_install_mode == 'local'
+
+- name: Fix directory permission
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    recurse: yes
+    mode: u=rwX,g=rX,o-rwx
+  loop:
+    - "{{ kibana_conf_dir }}"
+    - "{{ kibana_certs_dir}}"
+    - "{{ kibana_pid_dir}}"
+    - "{{ kibana_data_dir }}"
+    - "{{ kibana_log_dir }}"
+
+- name: create symlink to kibana
+  ansible.builtin.file:
+    src: "{{ kibana_extract_dir }}/kibana-{{ kibana_version }}"
+    dest: "{{ kibana_extract_dir }}/kibana"
+    state: link
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+
+- name: Render kibana service file
+  ansible.builtin.template:
+    src: kibana.service.j2
+    dest: /etc/systemd/system/kibana.service
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: Copy elastic CA
+  ansible.builtin.copy:
+    src: "{{ elasticsearch_local_certs_dir }}/{{ elasticsearch_ca_name }}"
+    dest: "{{ kibana_certs_dir }}/{{ elasticsearch_ca_name }}"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    mode: 0644
+  when: 
+    - elasticsearch_https_enabled
+    - not elastic_ca_file.stat.exists
+
+- set_fact:
+    elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- name: Render kibana configuration file
+  ansible.builtin.template:
+    src: kibana.yml.j2
+    dest: "{{ kibana_conf_dir }}/kibana.yml"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    mode: 0644
+
+- name: Render node.options file
+  ansible.builtin.template:
+    src: node.options.j2
+    dest: "{{ kibana_conf_dir }}/node.options"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    mode: 0644

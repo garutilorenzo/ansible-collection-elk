@@ -1,0 +1,22 @@
+[Unit]
+Description=Filebeat
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=filebeat
+WorkingDirectory={{ beats_extract_dir }}/filebeat
+
+User={{ beats_user }}
+Group={{ beats_group }}
+
+ExecStart={{ beats_extract_dir }}/filebeat/filebeat -c {{ filebeat_conf_dir }}/filebeat.yml
+
+StandardOutput=append:{{ filebeat_log_dir }}/filebeat_systemd.log
+StandardError=append:{{ filebeat_log_dir }}/filebeat_systemd_error.log
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

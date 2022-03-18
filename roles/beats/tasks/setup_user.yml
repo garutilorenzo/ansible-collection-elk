@@ -1,0 +1,13 @@
+---
+
+- name: add elk group 
+  ansible.builtin.group:
+    name: "{{ beats_group }}"
+    state: present
+
+- name: add elk user
+  ansible.builtin.user:
+    name: "{{ beats_user }}"
+    shell: /bin/sh
+    password: "*"
+    group: "{{ beats_group }}"

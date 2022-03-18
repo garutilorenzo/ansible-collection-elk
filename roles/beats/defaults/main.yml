@@ -1,0 +1,40 @@
+---
+beats_group: elk
+beats_user: elk
+beats_extract_dir: /opt
+beats_version: 8.1.0
+
+beats_monitoring_enabled: no
+filebeat_monitoring_port: 5066
+metricbeat_monitoring_port: 5067
+heartbeat_monitoring_port: 5068
+
+filebeat_conf_dir: /etc/filebeat
+filebeat_certs_dir: /etc/filebeat/certs
+filebeat_data_dir: /filebeat
+filebeat_log_dir: /var/log/filebeat
+filebeat_number_of_shards: 5
+
+metricbeat_conf_dir: /etc/metricbeat
+metricbeat_certs_dir: /etc/metricbeat/certs
+metricbeat_data_dir: /metricbeat
+metricbeat_log_dir: /var/log/metricbeat
+metricbeat_number_of_shards: 5
+
+heartbeat_conf_dir: /etc/heartbeat
+heartbeat_certs_dir: /etc/heartbeat/certs
+heartbeat_data_dir: /heartbeat
+heartbeat_log_dir: /var/log/heartbeat
+heartbeat_number_of_shards: 5
+
+setup_kibana_dashboards: no
+kibana_url: ''
+
+elasticsearch_https_enabled: yes
+elasticsearch_local_certs_dir: ~/very_secure_dir
+elasticsearch_ca_name: elasticsearch-ca.pem
+elasticsearch_username: elastic
+elasticsearch_password: changeme
+elasticsearch_monitoring_enabled: no
+
+elasticsearch_hosts: []

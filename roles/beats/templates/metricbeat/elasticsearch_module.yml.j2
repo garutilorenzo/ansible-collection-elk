@@ -1,0 +1,23 @@
+# Module: elasticsearch
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/master/metricbeat-module-elasticsearch.html
+
+- module: elasticsearch
+  service.name: elastic_metricbeat_monitor
+  xpack.enabled: true
+  metricsets:
+    - node
+    - node_stats
+    - index
+    - index_recovery
+    - index_summary
+    - shard
+
+  period: 10s
+  hosts:
+  {% for host in elasticsearch_hosts -%}
+    - "{{ elastic_virtual_proto }}://{{ host }}:9200"
+  {% endfor -%}
+  
+  username: "{{ elasticsearch_username }}"
+  password: "{{ elasticsearch_password }}"
+  ssl.certificate_authorities: ["{{ metricbeat_certs_dir }}/{{ elasticsearch_ca_name }}"]

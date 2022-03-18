@@ -1,0 +1,20 @@
+---
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: reload filebeat
+  ansible.builtin.systemd:
+    name: filebeat 
+    state: restarted
+
+- name: reload heartbeat
+  ansible.builtin.systemd:
+    name: heartbeat 
+    state: restarted
+
+- name: reload metricbeat
+  ansible.builtin.systemd:
+    name: metricbeat 
+    state: restarted

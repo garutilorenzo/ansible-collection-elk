@@ -1,0 +1,22 @@
+[Unit]
+Description=Heartbeat
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=heartbeat
+WorkingDirectory={{ beats_extract_dir }}/heartbeat
+
+User={{ beats_user }}
+Group={{ beats_group }}
+
+ExecStart={{ beats_extract_dir }}/heartbeat/heartbeat -c {{ heartbeat_conf_dir }}/heartbeat.yml
+
+StandardOutput=append:{{ heartbeat_log_dir }}/heartbeat_systemd.log
+StandardError=append:{{ heartbeat_log_dir }}/heartbeat_systemd_error.log
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

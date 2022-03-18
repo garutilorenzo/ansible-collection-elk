@@ -1,0 +1,22 @@
+kibana_group: elk
+kibana_user: elk
+kibana_extract_dir: /opt
+kibana_version: 8.1.0
+kibana_conf_dir: /etc/kibana
+kibana_log_dir: /var/log/kibana
+kibana_certs_dir: /etc/kibana/certs
+kibana_pid_dir: /var/run/kibana
+kibana_data_dir: /kibana
+kibana_https_enabled: no
+kibana_old_space_mb: 1024
+
+kibana_install_mode: http # local
+kibana_local_tar_path: ''
+
+elasticsearch_local_certs_dir: ~/very_secure_dir
+elasticsearch_ca_name: elasticsearch-ca.pem
+elasticsearch_https_enabled: yes
+elasticsearch_username: kibana_system
+elasticsearch_password: K1b4nap4sSw0rd
+
+elasticsearch_hosts: []

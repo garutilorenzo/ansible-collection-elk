@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  description: 'Setup elasticsearch cluster'
+  description: 'Setup kibana'
   platforms:
     - name: Ubuntu
       versions:
@@ -10,4 +10,6 @@ galaxy_info:
     - name: Fedora
       versions:
         - all
-  galaxy_tags: []
+  galaxy_tags:
+    - elk
+    - kibana
