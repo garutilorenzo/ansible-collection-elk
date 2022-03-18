@@ -9,7 +9,7 @@
 Install and configure the ELK stack:
 
 * elasticsearch
-* logstash (TODO)
+* logstash
 * kibana
 
 Elastic Beats:
@@ -32,8 +32,13 @@ You can refer to the README.md file in each role directory:
 
 * [elasticsearch](roles/elasticsearch/)
 * [kibana](roles/kibana/)
+* [logstash](roles/logstash/)
 * [beats](roles/beats/)
 
 ## Using this collection
 
-TBD
+Install from GitHub
+
+```
+ansible-galaxy collection install git+https://github.com/garutilorenzo/ansible-collection-elk
+```
