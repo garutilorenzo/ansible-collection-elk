@@ -1,0 +1,49 @@
+[Unit]
+Description=Logstash
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=logstash
+EnvironmentFile=-{{ logstash_env_file[ansible_os_family] }}
+
+WorkingDirectory={{ logstash_extract_dir }}/logstash
+
+User={{ logstash_user }}
+Group={{ logstash_user }}
+
+ExecStart={{ logstash_extract_dir }}/logstash/bin/logstash -f {{ logstash_conf_dir }}/logstash.conf
+
+StandardOutput=append:{{ logstash_log_dir }}/logstash_systemd.log
+StandardError=append:{{ logstash_log_dir }}/logstash_systemd_error.log
+
+# Specifies the maximum file descriptor number that can be opened by this process
+LimitNOFILE=65536
+
+# Specifies the maximum number of processes
+LimitNPROC=4096
+
+# Specifies the maximum size of virtual memory
+LimitAS=infinity
+
+# Specifies the maximum file size
+LimitFSIZE=infinity
+
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+
+# SIGTERM signal is used to stop the Java process
+KillSignal=SIGTERM
+
+# Send the signal only to the JVM rather than its control group
+KillMode=process
+
+# Java process is never killed
+SendSIGKILL=no
+
+# When a JVM receives a SIGTERM signal it exits with code 143
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

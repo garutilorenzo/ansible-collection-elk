@@ -1,0 +1,159 @@
+---
+
+- name: CA exists
+  stat:
+    path: "{{  logstash_certs_dir }}/{{ elasticsearch_ca_name }}"
+  register: elastic_ca_file
+
+- shell: uname -s
+  register: unames
+
+- shell: uname -m
+  register: unamem
+
+- name: add elk group 
+  ansible.builtin.group:
+    name: "{{ logstash_user }}"
+    state: present
+
+- name: add elk user
+  ansible.builtin.user:
+    name: "{{ logstash_user }}"
+    shell: /bin/sh
+    password: "*"
+    group: "{{ logstash_group }}"
+
+- name: is logstash installed
+  stat:
+    path: "{{ logstash_extract_dir }}/logstash-{{ logstash_version }}"
+  register: logstash_dir
+
+- name: Download and extract logstash
+  ansible.builtin.unarchive:
+    src: https://artifacts.elastic.co/downloads/logstash/logstash-{{ logstash_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
+    dest: "{{ logstash_extract_dir }}"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    remote_src: yes
+  when: 
+    - not logstash_dir.stat.exists
+    - logstash_install_mode == 'http'
+
+- ansible.builtin.fail:
+    msg: elasticsearch_install_mode set to local but no elasticsearch_local_tar_path specified
+  when:
+    - not logstash_dir.stat.exists
+    - logstash_install_mode == 'local'
+    - logstash_local_tar_path == ''
+
+- name: Extract logstash
+  ansible.builtin.unarchive:
+    src: "{{ logstash_local_tar_path }}/logstash-{{ logstash_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz"
+    dest: "{{ logstash_extract_dir }}"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+  when: 
+    - not logstash_dir.stat.exists
+    - logstash_install_mode == 'local'
+
+- name: Fix directory permission
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    recurse: yes
+    mode: u=rwX,g=rX,o-rwx
+  loop:
+    - "{{ logstash_conf_dir }}"
+    - "{{ logstash_log_dir }}"
+    - "{{ logstash_pid_dir }}"
+    - "{{ logstash_data_dir }}"
+    - "{{ logstash_certs_dir }}"
+
+- name: create symlink to logstash
+  ansible.builtin.file:
+    src: "{{ logstash_extract_dir }}/logstash-{{ logstash_version }}"
+    dest: "{{ logstash_extract_dir }}/logstash"
+    state: link
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+
+- name: Render logstash env file
+  ansible.builtin.template:
+    src: logstash_env.j2
+    dest: "{{ logstash_env_file[ansible_os_family] }}"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: Render logstash service file
+  ansible.builtin.template:
+    src: logstash.service.j2
+    dest: /etc/systemd/system/logstash.service
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: Copy elastic CA
+  ansible.builtin.copy:
+    src: "{{ elasticsearch_local_certs_dir }}/{{ elasticsearch_ca_name }}"
+    dest: "{{ logstash_certs_dir }}/{{ elasticsearch_ca_name }}"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+  when: 
+    - elasticsearch_https_enabled
+    - not elastic_ca_file.stat.exists
+
+- set_fact:
+    elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+
+- name: Render logstash yml configuration file
+  ansible.builtin.template:
+    src: logstash.yml.j2
+    dest: "{{ logstash_conf_dir }}/logstash.yml"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: Render logstash configuration file
+  ansible.builtin.template:
+    src: logstash.conf.j2
+    dest: "{{ logstash_conf_dir }}/logstash.conf"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: Render logstash JVM configuration file
+  ansible.builtin.template:
+    src: jvm.options.j2
+    dest: "{{ logstash_conf_dir }}/jvm.options"
+    owner: "{{logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: Copy logstash log4j configuration file
+  ansible.builtin.copy:
+    src: log4j2.properties
+    dest: "{{ logstash_conf_dir }}/log4j2.properties"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: Copy logstash pipelines configuration file
+  ansible.builtin.copy:
+    src: pipelines.yml
+    dest: "{{ logstash_conf_dir }}/pipelines.yml"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0644
+
+- name: enable and start logstash
+  ansible.builtin.systemd:
+    name: logstash 
+    state: started 
+    enabled: yes

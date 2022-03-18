@@ -1,0 +1,20 @@
+input {
+	beats {
+		port => {{ logstash_beats_tcp_port }}
+	}
+
+	tcp {
+		port => {{ logstash_tcp_port }}
+	}
+}
+
+## Add your filters / logstash plugins configuration here
+
+output {
+	elasticsearch {
+		hosts => [{% for host in elasticsearch_hosts %}"{{ elastic_virtual_proto }}://{{ host }}:9200"{% if not loop.last %},{% endif %}{% endfor -%}]
+		user => "{{ elasticsearch_username }}"
+		password => "{{ elasticsearch_password }}"
+        cacert => "{{ logstash_certs_dir }}/{{ elasticsearch_ca_name}}"
+	}
+}

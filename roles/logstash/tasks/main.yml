@@ -1,0 +1,7 @@
+---
+
+- include_tasks: 
+    file: install_logstash.yml
+    apply:
+      tags: elkinstall,logstash
+  tags: elkinstall,logstash

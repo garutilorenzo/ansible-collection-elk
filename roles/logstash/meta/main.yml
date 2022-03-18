@@ -1,0 +1,15 @@
+---
+dependencies: []
+
+galaxy_info:
+  description: 'Setup logstash'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+  galaxy_tags:
+    - elk
+    - logstash

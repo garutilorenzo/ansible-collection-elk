@@ -1,0 +1,28 @@
+---
+logstash_group: elk
+logstash_user: elk
+logstash_extract_dir: /opt
+logstash_version: 8.1.0
+
+logstash_conf_dir: /etc/logstash
+logstash_log_dir: /var/log/logstash
+logstash_pid_dir: /var/run/logstash
+logstash_certs_dir: /etc/logstash/certs
+logstash_data_dir: /logstash
+
+logstash_beats_tcp_port: 5044
+logstash_tcp_port: 5000
+
+logstash_jvm_xmx: 512m
+logstash_jvm_xms: 512m
+
+elasticsearch_local_certs_dir: ~/very_secure_dir
+elasticsearch_ca_name: elasticsearch-ca.pem
+elasticsearch_https_enabled: yes
+elasticsearch_username: logstash_system
+elasticsearch_password: l0gst4sHpAssw0rd,
+
+logstash_install_mode: http # local
+logstash_local_tar_path: ''
+
+elasticsearch_hosts: []
