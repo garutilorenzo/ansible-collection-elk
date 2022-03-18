@@ -100,6 +100,11 @@
     - elasticsearch_https_enabled
     - not elastic_ca_file.stat.exists
 
+- ansible.builtin.fail:
+    msg: no elasticsearch_hosts specified
+  when:
+    - elasticsearch_hosts | length == 0
+    
 - set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
