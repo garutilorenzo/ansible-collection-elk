@@ -1,13 +1,45 @@
 ---
 
+- name: Put SELinux in permissive mode, logging actions that would be blocked.
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive
+  when: 
+    - ansible_os_family == 'RedHat'
+    - disable_selinux
+
+- name: Disable SELinux
+  ansible.posix.selinux:
+    state: disabled
+  when: 
+    - ansible_os_family == 'RedHat'
+    - disable_selinux
+
+- name: disable firewalld
+  ansible.builtin.systemd:
+    name: firewalld 
+    state: stopped 
+    enabled: no
+  when: 
+    - ansible_os_family == 'RedHat'
+    - disable_firewall
+
+- name: disable ufw
+  ansible.builtin.systemd:
+    name: ufw 
+    state: stopped 
+    enabled: no
+  when: 
+    - ansible_os_family == 'Debian'
+    - disable_firewall
+
 - name: Install utils
   ansible.builtin.package:
-    name: "{{ item }}"
+    name: 
+      - jq
+      - unzip
     state: present
-    update_cache: yes
-  loop:
-    - jq
-    - unzip
+    update_cache: yes    
 
 - set_fact:
     virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"

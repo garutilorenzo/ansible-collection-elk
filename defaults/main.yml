@@ -1,3 +1,6 @@
+disable_firewall: no
+disable_selinux: no
+
 elasticsearch_user: elk
 elasticsearch_group: elk
 elasticsearch_extract_dir: /opt
@@ -37,3 +40,5 @@ elasticsearch_users:
     password: Rem0t3.Mon1t0ringU
 
 elasticsearch_resolv_mode: dns # hosts
+elasticsearch_install_mode: http # local
+elasticsearch_local_tar_path: ''
