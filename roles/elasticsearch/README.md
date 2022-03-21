@@ -36,7 +36,7 @@ This role accept the following variables:
 | `elasticsearch_jvm_xms`             | `256m`       | JVM XMS memory  |
 | `elasticsearch_subnet`              | `192.168.25.0/24`       | **CHANGE** this value based on your needs. This value is used to determinate the network interface to use if the machine has multiple network interfaces (Eg. Vagrant) |
 | `elasticsearch_resolv_mode`         | `dns`       | How the elastic resolve the names, default dns. If set to host the /etc/hosts file will be overwritten  |
-| `elasticsearch_users`         | `list()`       | List of dict. List of user with password. This role will set the default password for each user in this list. You can also use [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-passwords.html) tool to generate random password  |
+| `elasticsearch_users`         | `list()`       | List of dict. List of user with password. This role will set the default password for each user in this list. You can also use [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-passwords.html) tool to generate random password. To get the full list of the default password open the [main.yml](defaults/main.yml) |
 | `elasticsearch_install_mode`             | `http`       | Download elasticsearch tar form elastic website. If set to local set *elasticsearch_local_tar_path*  to a local path where the tar was previously downloaded |
 | `elasticsearch_local_tar_path`             | `''`       | Local path containing the elasticsearch tar  |
 
