@@ -28,3 +28,4 @@
     apply:
       tags: elkusers,elasticsearch
   tags: elkusers,elasticsearch
+  when: elasticsearch_security_enabled
