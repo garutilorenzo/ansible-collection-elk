@@ -29,7 +29,7 @@ This role accept the following variables:
 | `elasticsearch_cert_filename`       | `elastic_keystore.p12`       | Certificate filename |
 | `elasticsearch_http_password`       | `htTp4sS2o3d`       | HTTPS certificate password. **CHANGE** this value, is only an example password.  |
 | `elasticsearch_http_file`       | `/tmp/elasticsearch-ssl-http.zip`       | Output file for the HTTPS certificate generation script |
-| `elasticsearch_bootstrap_password`  | `changeme`       | Elasticsearch [bootstrap password](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#bootstrap-elastic-passwords).  **CHANGE** this value, follow [this](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#set-built-in-user-passwords) instructions  |
+| `elasticsearch_bootstrap_password`  | `changeme`       | Elasticsearch [bootstrap password](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#bootstrap-elastic-passwords).  **CHANGE** this value, is only an example password. For more informatsion read [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#set-built-in-user-passwords)  |
 | `elasticsearch_version`             | `8.1.0`       | Elasticsearch version  |
 | `elasticsearch_cluster_name`        | `elk-cluster-test`       | Elasticsearch cluster name  |
 | `elasticsearch_jvm_xmx`             | `256m`       | JVM XMX memory  |
@@ -42,7 +42,7 @@ This role accept the following variables:
 
 ### Role extra variables
 
-This role accept an extra variables *generateca*. If this value is defined the role will automatically generate the CA, example usage:
+This role accept an extra variable *generateca*. If this value is defined the role will automatically generate the CA, example usage:
 
 ```
 ansible-playbook site.yml -i hosts.ini -e "generateca=yes"
