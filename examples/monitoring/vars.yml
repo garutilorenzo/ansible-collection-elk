@@ -1,0 +1,13 @@
+---
+
+setup_kibana_dashboards: yes
+kibana_url: http://kibana-node1-FQDN:5601 # FQDN of the kibna node
+
+# FQDN of the elasticsearch nodes
+elasticsearch_hosts:
+  - elk-node1
+  - elk-node2
+  - elk-node3
+  - elk-node4
+  - elk-node5
+  - elk-node6

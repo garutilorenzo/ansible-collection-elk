@@ -8,15 +8,15 @@
 
 Install and configure the ELK stack:
 
-* elasticsearch
-* logstash
-* kibana
+* [elasticsearch](https://www.elastic.co/elasticsearch/)
+* [logstash](https://www.elastic.co/logstash/)
+* [kibana](https://www.elastic.co/kibana/)
 
 Elastic Beats:
 
-* filebeat
-* metricbeat
-* heartbeath
+* [filebeat](https://www.elastic.co/beats/filebeat)
+* [metricbeat](https://www.elastic.co/beats/metricbeat)
+* [heartbeath](https://www.elastic.co/beats/heartbeat)
 
 ## Requirements
 
@@ -42,3 +42,7 @@ Install from GitHub
 ```
 ansible-galaxy collection install git+https://github.com/garutilorenzo/ansible-collection-elk
 ```
+
+## Examples
+
+[How](examples/) to use this Ansible collection

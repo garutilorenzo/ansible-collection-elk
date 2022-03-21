@@ -1,0 +1,36 @@
+---
+- hosts: elasticsearch 
+  become: yes
+  remote_user: "CHANGE_ME"
+  collections:
+    - garutilorenzo.elk
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - import_role:
+        name: elasticsearch
+
+- hosts: kibana 
+  become: yes
+  remote_user: "CHANGE_ME"
+  collections:
+    - garutilorenzo.elk
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - import_role:
+        name: kibana
+
+- hosts: logstash 
+  become: yes
+  remote_user: "CHANGE_ME"
+  collections:
+    - garutilorenzo.elk
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - import_role:
+        name: logstash

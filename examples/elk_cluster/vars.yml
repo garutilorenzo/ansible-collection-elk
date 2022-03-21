@@ -1,0 +1,15 @@
+---
+
+disable_firewall: yes
+disable_selinux: yes
+
+elasticsearch_resolv_mode: hosts
+
+# FQDN of the elasticsearch nodes
+elasticsearch_hosts:
+  - elk-node1
+  - elk-node2
+  - elk-node3
+  - elk-node4
+  - elk-node5
+  - elk-node6
