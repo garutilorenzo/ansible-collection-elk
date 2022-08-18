@@ -7,7 +7,7 @@ authors:
   - "Lorenzo Garuti <garuti.lorenzo@gmail.com>"
 dependencies:
 license:
-  - "GPLv3"
+  - "GPL-3.0-or-later"
 tags:
   - elk
   - elasticsearch
