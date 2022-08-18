@@ -6,10 +6,11 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - all
+        - jammy
+        - focal
     - name: Fedora
       versions:
-        - all
+        - 35
   galaxy_tags:
     - elk
     - elasticsearch
