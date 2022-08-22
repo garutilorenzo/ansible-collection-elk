@@ -3,6 +3,10 @@
 [![GitHub forks](https://img.shields.io/github/forks/garutilorenzo/ansible-collection-elk)](https://github.com/garutilorenzo/ansible-collection-elk/network)
 [![GitHub stars](https://img.shields.io/github/stars/garutilorenzo/ansible-collection-elk)](https://github.com/garutilorenzo/ansible-collection-elk/stargazers)
 
+<p align="center">
+  <img src="https://garutilorenzo.github.io/images/elk-logo.png?" alt="elk-logo"/>
+</p>
+
 # Install and configure the ELK stack
 
 Install and configure the ELK stack:
