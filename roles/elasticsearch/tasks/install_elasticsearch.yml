@@ -23,76 +23,90 @@
     path: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
   register: elasticsearch_dir
 
-- name: Download and extract elasticsearch
-  ansible.builtin.unarchive:
-    src: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
-    dest: "{{ elasticsearch_extract_dir }}"
-    owner: "{{ elasticsearch_user }}"
-    group: "{{ elasticsearch_group }}"
-    remote_src: yes
+- set_fact:
+    elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
+
+- name: "Check elasticsearch availability"
+  uri:
+    url: "{{ elastic_virtual_proto }}://localhost:9200"
+    status_code: 401
+    validate_certs: no
+  register: elk_http_result
+  ignore_errors: yes
+
+- block:
+    - name: Download and extract elasticsearch
+      ansible.builtin.unarchive:
+        src: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz
+        dest: "{{ elasticsearch_extract_dir }}"
+        owner: "{{ elasticsearch_user }}"
+        group: "{{ elasticsearch_group }}"
+        remote_src: yes
+      when: 
+        - elasticsearch_install_mode == 'http'
+
+    - ansible.builtin.fail:
+        msg: elasticsearch_install_mode set to local but no elasticsearch_local_tar_path specified
+      when:
+        - elasticsearch_install_mode == 'local'
+        - elasticsearch_local_tar_path == ''
+
+    - name: Extract elasticsearch
+      ansible.builtin.unarchive:
+        src: "{{ elasticsearch_local_tar_path }}/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz"
+        dest: "{{ elasticsearch_extract_dir }}"
+        owner: "{{ elasticsearch_user }}"
+        group: "{{ elasticsearch_group }}"
+      when: 
+        - elasticsearch_install_mode == 'local'
+
+    - name: Fix directory permission
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ elasticsearch_user }}"
+        group: "{{ elasticsearch_group }}"
+        recurse: yes
+        mode: u=rwX,g=rX,o-rwx
+      loop:
+        - "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
+        - "{{ elasticsearch_data_dir }}"
+        - "{{ elasticsearch_log_dir }}"
+        - "{{ elasticsearch_pid_dir }}"
+        - "{{ elasticsearch_conf_dir }}"
+        - "{{ elasticsearch_certs_dir}}"
+
+    - name: create symlink to elasticsearch
+      ansible.builtin.file:
+        src: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
+        dest: "{{ elasticsearch_extract_dir }}/elasticsearch"
+        state: link
+        owner: "{{ elasticsearch_user }}"
+        group: "{{ elasticsearch_group }}"
+
+    - include_tasks: 
+        file: generate_ca.yml
+      when: 
+        - generateca is defined
+        - elasticsearch_security_enabled
+        - inventory_hostname in groups['elasticsearch_ca']
+
+    - include_tasks: 
+        file: generate_node_cert.yml
+      when: elasticsearch_security_enabled
+
+    - include_tasks: 
+        file: generate_https_cert.yml
+      when: elasticsearch_https_enabled
+
+    - include_tasks: 
+        file: keystore_setup.yml
+      when: elasticsearch_security_enabled
+
   when: 
     - not elasticsearch_dir.stat.exists
-    - elasticsearch_install_mode == 'http'
-
-- ansible.builtin.fail:
-    msg: elasticsearch_install_mode set to local but no elasticsearch_local_tar_path specified
-  when:
-    - not elasticsearch_dir.stat.exists
-    - elasticsearch_install_mode == 'local'
-    - elasticsearch_local_tar_path == ''
-
-- name: Extract elasticsearch
-  ansible.builtin.unarchive:
-    src: "{{ elasticsearch_local_tar_path }}/elasticsearch-{{ elasticsearch_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}.tar.gz"
-    dest: "{{ elasticsearch_extract_dir }}"
-    owner: "{{ elasticsearch_user }}"
-    group: "{{ elasticsearch_group }}"
-  when: 
-    - not elasticsearch_dir.stat.exists
-    - elasticsearch_install_mode == 'local'
-
-- name: Fix directory permission
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ elasticsearch_user }}"
-    group: "{{ elasticsearch_group }}"
-    recurse: yes
-    mode: u=rwX,g=rX,o-rwx
-  loop:
-    - "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
-    - "{{ elasticsearch_data_dir }}"
-    - "{{ elasticsearch_log_dir }}"
-    - "{{ elasticsearch_pid_dir }}"
-    - "{{ elasticsearch_conf_dir }}"
-    - "{{ elasticsearch_certs_dir}}"
-
-- name: create symlink to elasticsearch
-  ansible.builtin.file:
-    src: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
-    dest: "{{ elasticsearch_extract_dir }}/elasticsearch"
-    state: link
-    owner: "{{ elasticsearch_user }}"
-    group: "{{ elasticsearch_group }}"
-
-- include_tasks: 
-    file: generate_ca.yml
-  when: 
-    - generateca is defined
-    - elasticsearch_security_enabled
-    - inventory_hostname in groups['elasticsearch_ca']
-
-- include_tasks: 
-    file: generate_node_cert.yml
-  when: elasticsearch_security_enabled
-
-- include_tasks: 
-    file: generate_https_cert.yml
-  when: elasticsearch_https_enabled
-
-- include_tasks: 
-    file: keystore_setup.yml
-  when: elasticsearch_security_enabled
+    - elk_http_result.status is defined 
+    - elk_http_result.status == 401
 
 - name: Set vm.max_map_count value
   ansible.posix.sysctl:
@@ -120,6 +134,16 @@
   notify:
     - reload systemd
 
+- set_fact:
+    elastic_ip_address: "{{ item }}"
+  when: "item | ipaddr( elasticsearch_subnet )"
+  with_items: "{{ ansible_all_ipv4_addresses }}"
+
+- set_fact:
+    elastic_iface: "{{ hostvars[inventory_hostname]['ansible_' + item ]['device'] }}"
+  when: "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ipaddr( elasticsearch_subnet )"
+  with_items: "{{ ansible_interfaces }}"
+  
 - name: Render elasticsearch configuration file
   ansible.builtin.template:
     src: elasticsearch.yml.j2

@@ -32,6 +32,8 @@ This role accept the following variables:
 | `elasticsearch_bootstrap_password`  | `changeme`       | Elasticsearch [bootstrap password](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#bootstrap-elastic-passwords).  **CHANGE** this value, is only an example password. For more informatsion read [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html#set-built-in-user-passwords)  |
 | `elasticsearch_version`             | `8.1.0`       | Elasticsearch version  |
 | `elasticsearch_cluster_name`        | `elk-cluster-test`       | Elasticsearch cluster name  |
+| `elasticsearch_default_node_roles`        | `list()`       | Default list of [node roles](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html). If the node is a master node  all the [default roles](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#node-roles) are associeted whit the provisioned node, except the **data** role.|
+| `elasticsearch_master_is_also_data_node`        | `no`       | If set to yes, the master node will be also a data node. The role **data** will be associated with the provisioned node.  |
 | `elasticsearch_jvm_xmx`             | `256m`       | JVM XMX memory  |
 | `elasticsearch_jvm_xms`             | `256m`       | JVM XMS memory  |
 | `elasticsearch_subnet`              | `192.168.25.0/24`       | **CHANGE** this value based on your needs. This value is used to determinate the network interface to use if the machine has multiple network interfaces (Eg. Vagrant) |

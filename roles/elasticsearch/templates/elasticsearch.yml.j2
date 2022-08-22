@@ -26,6 +26,18 @@ node.name: {{ ansible_hostname|lower }}
 #
 #node.attr.rack: r1
 #
+node.roles:
+{% for role in elasticsearch_default_node_roles %}
+  - {{ role }}
+{% endfor %}
+{% if inventory_hostname in groups['elasticsearch_data'] %}
+  - data
+{% endif %}
+{% if inventory_hostname in groups['elasticsearch_master'] %}
+{% if elasticsearch_master_is_also_data_node %}
+  - data
+{% endif %}
+{% endif %}
 # ----------------------------------- Paths ------------------------------------
 #
 # Path to directory where to store the data (separate multiple locations by comma):
@@ -81,13 +93,6 @@ cluster.initial_master_nodes:
 {% else %}
 discovery.type: "single-node"
 {% endif %}
-#discovery.seed_hosts: ["host1", "host2"]
-#
-# Bootstrap the cluster using an initial set of master-eligible nodes:
-#
-#cluster.initial_master_nodes: ["node-1", "node-2"]
-#
-# For more information, consult the discovery and cluster formation module documentation.
 #
 # ---------------------------------- Various -----------------------------------
 #
