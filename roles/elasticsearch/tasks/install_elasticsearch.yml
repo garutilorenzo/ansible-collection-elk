@@ -106,7 +106,7 @@
   when: 
     - not elasticsearch_dir.stat.exists
     - elk_http_result.status is defined 
-    - elk_http_result.status == 401
+    - elk_http_result.status != 401
 
 - name: Set vm.max_map_count value
   ansible.posix.sysctl:
@@ -143,7 +143,7 @@
     elastic_iface: "{{ hostvars[inventory_hostname]['ansible_' + item ]['device'] }}"
   when: "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_interfaces }}"
-  
+
 - name: Render elasticsearch configuration file
   ansible.builtin.template:
     src: elasticsearch.yml.j2
