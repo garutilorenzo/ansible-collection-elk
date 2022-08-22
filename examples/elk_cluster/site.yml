@@ -3,7 +3,7 @@
   become: yes
   remote_user: "CHANGE_ME"
   collections:
-    - garutilorenzo.elk
+    - garutilorenzo.ansible_collection_elk
   vars_files:
     - vars.yml
 
@@ -15,7 +15,7 @@
   become: yes
   remote_user: "CHANGE_ME"
   collections:
-    - garutilorenzo.elk
+    - garutilorenzo.ansible_collection_elk
   vars_files:
     - vars.yml
 
@@ -27,7 +27,7 @@
   become: yes
   remote_user: "CHANGE_ME"
   collections:
-    - garutilorenzo.elk
+    - garutilorenzo.ansible_collection_elk
   vars_files:
     - vars.yml
 
