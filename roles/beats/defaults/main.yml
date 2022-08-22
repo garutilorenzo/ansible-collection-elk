@@ -14,18 +14,21 @@ filebeat_certs_dir: /etc/filebeat/certs
 filebeat_data_dir: /filebeat
 filebeat_log_dir: /var/log/filebeat
 filebeat_number_of_shards: 1
+filebeat_number_of_replicas: 1
 
 metricbeat_conf_dir: /etc/metricbeat
 metricbeat_certs_dir: /etc/metricbeat/certs
 metricbeat_data_dir: /metricbeat
 metricbeat_log_dir: /var/log/metricbeat
 metricbeat_number_of_shards: 1
+metricbeat_number_of_replicas: 1
 
 heartbeat_conf_dir: /etc/heartbeat
 heartbeat_certs_dir: /etc/heartbeat/certs
 heartbeat_data_dir: /heartbeat
 heartbeat_log_dir: /var/log/heartbeat
 heartbeat_number_of_shards: 1
+heartbeat_number_of_replicas: 1
 
 setup_kibana_dashboards: no
 kibana_url: ''

@@ -70,6 +70,7 @@ heartbeat.monitors:
 
 setup.template.settings:
   index.number_of_shards: {{ heartbeat_number_of_shards }}
+  index.number_of_replicas: {{ heartbeat_number_of_replicas }}
   index.codec: best_compression
   #_source.enabled: false
 

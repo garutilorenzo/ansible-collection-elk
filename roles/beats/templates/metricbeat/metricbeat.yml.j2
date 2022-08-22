@@ -49,6 +49,7 @@ metricbeat.config.modules:
 
 setup.template.settings:
   index.number_of_shards: {{ metricbeat_number_of_shards }}
+  index.number_of_replicas: {{ metricbeat_number_of_replicas }}
   index.codec: best_compression
   #_source.enabled: false
 

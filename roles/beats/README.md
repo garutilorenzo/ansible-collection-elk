@@ -19,16 +19,19 @@ Setup and configure elastic Beats
 | `filebeat_data_dir`              | `/filebeat`       | Filebeat data directory  |
 | `filebeat_log_dir`               | `/var/log/filebeat`       | Filebeat log directory  |
 | `filebeat_number_of_shards`      | `1`       | Number of shard for the filebeat index template  |
+| `filebeat_number_of_replicas`    | `1`       | Number of replica for the filebeat index template  |
 | `metricbeat_conf_dir`            | `/etc/metricbeat`       | Metricbeat config directory  |
 | `metricbeat_certs_dir`           | `/etc/metricbeat/certs`       |Metricbeat certs directory  |
 | `metricbeat_data_dir`            | `/metricbeat`       | Metricbeat data directory  |
 | `metricbeat_log_dir`             | `/var/log/metricbeat`       | Metricbeat log directory  |
 | `metricbeat_number_of_shards`    | `1`       | Number of shard for the metricbeat index template  |
+| `metricbeat_number_of_replicas`  | `1`       | Number of replica for the metricbeat index template  |
 | `heartbeat_conf_dir`             | `/etc/heartbeat`       | Heartbeat config directory  |
 | `heartbeat_certs_dir`            | `/etc/heartbeat/certs`       |Heartbeat certs directory  |
 | `heartbeat_data_dir`             | `/heartbeat`       | Heartbeat data directory  |
 | `heartbeat_log_dir`              | `/var/log/heartbeat`       | Heartbeat log directory  |
 | `heartbeat_number_of_shards`     | `1`       | Number of shard for the heartbeat index template  |
+| `heartbeat_number_of_replicas`   | `1`       | Number of replica for the heartbeat index template  |
 | `setup_kibana_dashboards`        | `no`       | Install or not the kibana dashboards  |
 | `kibana_url`                     | `''`       | kibana url required for the setup of the dashboards  |
 | `elasticsearch_local_certs_dir`  | `~/very_secure_dir`       | Local directory where the Elasticsearch certificates are stored  |
