@@ -3,7 +3,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/garutilorenzo/ansible-collection-elk)](https://github.com/garutilorenzo/ansible-collection-elk/network)
 [![GitHub stars](https://img.shields.io/github/stars/garutilorenzo/ansible-collection-elk)](https://github.com/garutilorenzo/ansible-collection-elk/stargazers)
 
-
 # Install and configure the ELK stack
 
 Install and configure the ELK stack:
@@ -58,3 +57,7 @@ vagrant up
 ```
 
 In the Vagrantfile you can inject your public ssh key directly in the authorized_keys of the vagrant user. You have to change the *CHANGE_ME* placeholder in the Vagrantfile. You can also adjust the number of the vm deployed by changing the NNODES variable (Default: 6)
+
+## Tutorial 
+
+Full tutorial available [here](https://garutilorenzo.github.io/ansible-collection-elk/)
