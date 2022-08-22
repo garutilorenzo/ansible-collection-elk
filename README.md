@@ -35,6 +35,8 @@ You can refer to the README.md file in each role directory:
 * [logstash](roles/logstash/)
 * [beats](roles/beats/)
 
+you can also explore all roles variables [here](docs/ROLES_VARS.md)
+
 ## Using this collection
 
 Install from GitHub
@@ -46,3 +48,13 @@ ansible-galaxy collection install git+https://github.com/garutilorenzo/ansible-c
 ## Examples
 
 [How](examples/) to use this Ansible collection
+
+## Vagrant
+
+To test this collection you can use [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/) to bring up a example infrastructure. Once you have downloaded this repo use Vagrant to start the virtual machines:
+
+```
+vagrant up
+```
+
+In the Vagrantfile you can inject your public ssh key directly in the authorized_keys of the vagrant user. You have to change the *CHANGE_ME* placeholder in the Vagrantfile. You can also adjust the number of the vm deployed by changing the NNODES variable (Default: 6)

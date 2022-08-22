@@ -12,6 +12,8 @@ In all examples in this directory:
 | `elk_cluster`  | Elasticsearch cluster (3 master nodes, 3 data nodes), 2 kibana instances, 2 logstash instances  |
 | `monitoring`  | Monitor some nodes with the elastic beats and setup the kibana dashboards  |
 
+you can explore all roles variables [here](docs/ROLES_VARS.md)
+
 ## Generate certs
 
 If you don't have your own CA certificate you can generate a new CA with:
