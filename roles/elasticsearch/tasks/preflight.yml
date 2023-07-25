@@ -46,10 +46,10 @@
 
 - set_fact:
     elastic_ip_address: "{{ item }}"
-  when: "item | ipaddr( elasticsearch_subnet )"
+  when: "item | ansible.utils.ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_all_ipv4_addresses }}"
 
 - set_fact:
     elastic_iface: "{{ hostvars[inventory_hostname]['ansible_' + item ]['device'] }}"
-  when: "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ipaddr( elasticsearch_subnet )"
+  when: "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ansible.utils.ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_interfaces }}"
