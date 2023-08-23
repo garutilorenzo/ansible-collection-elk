@@ -1,9 +1,24 @@
 ---
 
-- name: Generate /etc/hosts
-  ansible.builtin.template:
-    src: hosts.j2
-    dest: /etc/hosts
-    owner: root
-    group: root
-    mode: 0644
+- set_fact:
+    elk_host:
+      hostname: "{{ item }}"
+      ip: "{{ hostvars[item]['elastic_ip_address'] }}"
+  with_items: "{{ groups['elasticsearch'] }}"
+  register: elk_hosts
+
+- set_fact:
+    elk_hosts: "{{ elk_hosts.results | map(attribute='ansible_facts.elk_host') | list }}"
+
+- name: debug var elk_hosts
+  debug:
+    var: elk_hosts
+
+- name: Add ELK entries to /etc/hosts
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: ".*\\s+{{ item.hostname }}"
+    line: "{{ item.ip }}\t{{ item.hostname }}"
+    state: present
+    backup: yes
+  with_items: "{{ elk_hosts }}"
