@@ -10,10 +10,6 @@
 - set_fact:
     elk_hosts: "{{ elk_hosts.results | map(attribute='ansible_facts.elk_host') | list }}"
 
-- name: debug var elk_hosts
-  debug:
-    var: elk_hosts
-
 - name: Add ELK entries to /etc/hosts
   lineinfile:
     path: "/etc/hosts"
