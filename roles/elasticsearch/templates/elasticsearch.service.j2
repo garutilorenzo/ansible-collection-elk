@@ -11,7 +11,7 @@ EnvironmentFile=-{{ elasticsearch_env_file[ansible_os_family] }}
 WorkingDirectory={{ elasticsearch_extract_dir }}/elasticsearch
 
 User={{ elasticsearch_user }}
-Group={{ elasticsearch_user }}
+Group={{ elasticsearch_group }}
 
 ExecStart={{ elasticsearch_extract_dir }}/elasticsearch/bin/elasticsearch -p ${PID_DIR}/elasticsearch.pid --quiet
 
