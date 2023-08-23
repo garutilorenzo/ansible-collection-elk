@@ -52,8 +52,9 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /var/log/*.log
-    #- c:\programdata\elasticsearch\logs\*
+    {% for log_path in filebeat_log_paths -%}
+    - {{ log_path }}
+    {% endfor %}
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
