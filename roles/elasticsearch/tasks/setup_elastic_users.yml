@@ -17,3 +17,33 @@
   with_items: "{{ elasticsearch_users }}"
   no_log: true
   run_once: true
+
+- name: Setup extra ELK roles
+  ansible.builtin.uri:
+    url: "{{ virtual_proto }}://localhost:9200/_security/role/{{ item.name }}"
+    user: elastic
+    password: "{{ elasticsearch_bootstrap_password }}"
+    method: POST
+    body: {"cluster" : "{{ item.cluster }}", "indices": "{{ item.indices }}"}
+    force_basic_auth: yes
+    validate_certs: no
+    status_code: 200
+    body_format: json
+  with_items: "{{ elasticsearch_extra_roles }}"
+  no_log: true
+  run_once: true
+
+- name: Setup extra ELK users
+  ansible.builtin.uri:
+    url: "{{ virtual_proto }}://localhost:9200/_security/user/{{ item.username }}"
+    user: elastic
+    password: "{{ elasticsearch_bootstrap_password }}"
+    method: POST
+    body: {"password" : "{{ item.password }}", "roles": "{{ item.roles }}"}
+    force_basic_auth: yes
+    validate_certs: no
+    status_code: 200
+    body_format: json
+  with_items: "{{ elasticsearch_extra_users }}"
+  no_log: true
+  run_once: true
