@@ -47,6 +47,24 @@ elasticsearch_users:
   - username: remote_monitoring_user
     password: Rem0t3.Mon1t0ringU
 
+# extra elasticsearch_roles
+# example
+# elasticsearch_extra_roles:
+#   - name: viewer
+#     cluster: [ 'monitor' ]
+#     indices:
+#       - names: [ 'logstash-*' ]
+#         privileges: [ 'read' ]
+elasticsearch_extra_roles: []
+
+# extra elasticsearch_users
+# example
+# elasticsearch_extra_users:
+#   - username: viewer
+#     password: v13w3rP4ssw0rd
+#     roles: [ 'viewer' ]
+elasticsearch_extra_users: []
+
 elasticsearch_resolv_mode: dns # hosts
 elasticsearch_install_mode: http # local
 elasticsearch_local_tar_path: ''
