@@ -11,7 +11,7 @@ EnvironmentFile=-{{ logstash_env_file[ansible_os_family] }}
 WorkingDirectory={{ logstash_extract_dir }}/logstash
 
 User={{ logstash_user }}
-Group={{ logstash_user }}
+Group={{ logstash_group }}
 
 ExecStart={{ logstash_extract_dir }}/logstash/bin/logstash -f {{ logstash_conf_dir }}/logstash.conf
 
