@@ -15,6 +15,8 @@ filebeat_data_dir: /filebeat
 filebeat_log_dir: /var/log/filebeat
 filebeat_number_of_shards: 1
 filebeat_number_of_replicas: 1
+filebeat_log_paths:
+- "/var/log/*.log"
 
 metricbeat_conf_dir: /etc/metricbeat
 metricbeat_certs_dir: /etc/metricbeat/certs
