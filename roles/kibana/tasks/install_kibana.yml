@@ -105,7 +105,7 @@
   when:
     - elasticsearch_hosts | length == 0
     
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 - name: Render kibana configuration file
