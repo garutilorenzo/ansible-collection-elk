@@ -1,6 +1,6 @@
 ---
 
-- set_fact:
+- ansible.builtin.set_fact:
     virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 - name: Setup ELK users

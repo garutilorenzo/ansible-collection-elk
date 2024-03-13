@@ -1,13 +1,13 @@
 ---
 
-- set_fact:
+- ansible.builtin.set_fact:
     elk_host:
       hostname: "{{ item }}"
       ip: "{{ hostvars[item]['elastic_ip_address'] }}"
   with_items: "{{ groups['elasticsearch'] }}"
   register: elk_hosts
 
-- set_fact:
+- ansible.builtin.set_fact:
     elk_hosts: "{{ elk_hosts.results | map(attribute='ansible_facts.elk_host') | list }}"
 
 - name: Add ELK entries to /etc/hosts

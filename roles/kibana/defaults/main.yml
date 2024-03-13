@@ -17,7 +17,7 @@ elasticsearch_local_certs_dir: ~/very_secure_dir
 elasticsearch_ca_name: elasticsearch-ca.pem
 elasticsearch_security_enabled: yes
 elasticsearch_https_enabled: yes
-elasticsearch_username: kibana_system
-elasticsearch_password: K1b4nap4sSw0rd
+kibana_username: kibana_system
+kibana_password: K1b4nap4sSw0rd
 
 elasticsearch_hosts: []

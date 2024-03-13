@@ -23,7 +23,6 @@ elasticsearch_version: 8.1.0
 elasticsearch_cluster_name: elk-cluster-test
 elasticsearch_jvm_xmx: 256m
 elasticsearch_jvm_xms: 256m
-elasticsearch_subnet: 192.168.25.0/24
 
 elasticsearch_master_is_also_data_node: no
 elasticsearch_default_node_roles: 

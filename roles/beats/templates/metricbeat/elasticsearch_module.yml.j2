@@ -18,6 +18,6 @@
     - "{{ elastic_virtual_proto }}://{{ host }}:9200"
   {% endfor -%}
   
-  username: "{{ elasticsearch_username }}"
-  password: "{{ elasticsearch_password }}"
+  username: "{{ beats_username }}"
+  password: "{{ beats_password }}"
   ssl.certificate_authorities: ["{{ metricbeat_certs_dir }}/{{ elasticsearch_ca_name }}"]

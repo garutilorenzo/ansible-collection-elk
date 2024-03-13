@@ -14,8 +14,8 @@ output {
 	elasticsearch {
 		hosts => [{% for host in elasticsearch_hosts %}"{{ elastic_virtual_proto }}://{{ host }}:9200"{% if not loop.last -%},{% endif %}{% endfor -%}]
 		{% if elasticsearch_security_enabled -%}
-		user => "{{ elasticsearch_username }}"
-		password => "{{ elasticsearch_password }}"
+		user => "{{ logstash_username }}"
+		password => "{{ logstash_password }}"
 		{% endif %}
 		{%- if elasticsearch_https_enabled -%}
         cacert => "{{ logstash_certs_dir }}/{{ elasticsearch_ca_name}}"
