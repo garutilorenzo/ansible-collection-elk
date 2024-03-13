@@ -17,7 +17,7 @@ Setup and configure logstash
 | `logstash_data_dir`            | `/logstash`       | Logstash data dir  |
 | `logstash_beats_tcp_port`      | `5044`       | logstash beats tcp listen port  |
 | `logstash_tcp_port`            | `5000`       | logstash  tcp listen port  |
-| `logstash_install_mode`        | `local`       | Download Logstash tar form elastic website. If set to local set *logstash_local_tar_path*  to a local path where the tar was previously downloaded  |
+| `logstash_install_mode`        | `http`       | Download Logstash tar form elastic website. If set to local set *logstash_local_tar_path*  to a local path where the tar was previously downloaded  |
 | `logstash_local_tar_path`          | `''`       | Local path Logstash the elasticsearch tar  |
 | `elasticsearch_local_certs_dir`  | `~/very_secure_dir`       | Local directory where the Elasticsearch certificates are stored  |
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem`       | Elasticsearch CA name  |
