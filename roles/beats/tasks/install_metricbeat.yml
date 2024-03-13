@@ -91,7 +91,7 @@
   notify:
     - reload metricbeat
 
-#TODO
+# TODO
 # - name: Render metricbeat elasticsearch module file
 #   ansible.builtin.template:
 #     src: metricbeat/elasticsearch_module.yml.j2

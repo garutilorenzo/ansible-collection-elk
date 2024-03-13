@@ -131,8 +131,8 @@ output.elasticsearch:
   # Authentication credentials - either API key or username/password.
   #api_key: "id:api_key"
   {% if elasticsearch_security_enabled -%}
-  username: "{{ elasticsearch_username }}"
-  password: "{{ elasticsearch_password }}"
+  username: "{{ beats_username }}"
+  password: "{{ beats_password }}"
   {% endif %}
   
   {% if elasticsearch_https_enabled -%}

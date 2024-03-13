@@ -60,8 +60,8 @@ Here you can find all roles variables
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem` | Elasticsearch CA name                                                                                                                                                                |
 | `elasticsearch_https_enabled`    | `yes`                  | Define if the Elasticsearch security [plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html) is enabled or not |
 | `elasticsearch_security_enabled` | `yes`                  | Define if [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html) is enabled or not                                            |
-| `elasticsearch_username`         | `kibana_system`        | Username used to connect to the elastisearch servers                                                                                                                                 |
-| `elasticsearch_password`         | `K1b4nap4sSw0rd`       | password of the _elasticsearch_username_                                                                                                                                             |
+| `kibana_username`         | `kibana_system`        | Username used to connect to the elastisearch servers                                                                                                                                 |
+| `kibana_password`         | `K1b4nap4sSw0rd`       | password of the _kibana_username_                                                                                                                                             |
 | `elasticsearch_hosts`            | `[]`                   | List of elasticsearch server names                                                                                                                                                   |
 
 ## Logstash
@@ -85,8 +85,8 @@ Here you can find all roles variables
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem` | Elasticsearch CA name                                                                                                                                                                |
 | `elasticsearch_https_enabled`    | `yes`                  | Define if the Elasticsearch security [plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html) is enabled or not |
 | `elasticsearch_security_enabled` | `yes`                  | Define if [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html) is enabled or not                                            |
-| `elasticsearch_username`         | `logstash_system`      | Username used to connect to the elastisearch servers                                                                                                                                 |
-| `elasticsearch_password`         | `l0gst4sHpAssw0rd,`    | password of the _elasticsearch_username_                                                                                                                                             |
+| `logstash_username`         | `logstash_system`      | Username used to connect to the elastisearch servers                                                                                                                                 |
+| `logstash_password`         | `l0gst4sHpAssw0rd,`    | password of the _logstash_username_                                                                                                                                             |
 | `elasticsearch_hosts`            | `[]`                   | List of elasticsearch server names                                                                                                                                                   |
 
 ## Beats
@@ -126,6 +126,6 @@ Here you can find all roles variables
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem`  | Elasticsearch CA name                                                                                                                                                                |
 | `elasticsearch_https_enabled`    | `yes`                   | Define if the Elasticsearch security [plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html) is enabled or not |
 | `elasticsearch_security_enabled` | `yes`                   | Define if [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html) is enabled or not                                            |
-| `elasticsearch_username`         | `kibana_system`         | Username used to connect to the elastisearch servers                                                                                                                                 |
-| `elasticsearch_password`         | `K1b4nap4sSw0rd`        | password of the _elasticsearch_username_                                                                                                                                             |
+| `beats_username`         | `kibana_system`         | Username used to connect to the elastisearch servers                                                                                                                                 |
+| `beats_password`         | `K1b4nap4sSw0rd`        | password of the _beats_username_                                                                                                                                             |
 | `elasticsearch_hosts`            | `[]`                    | List of elasticsearch server names                                                                                                                                                   |

@@ -23,6 +23,6 @@ Setup and configure logstash
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem`       | Elasticsearch CA name  |
 | `elasticsearch_https_enabled`    | `yes`       | Define if the Elasticsearch security [plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html) is enabled or not  |
 | `elasticsearch_security_enabled`    | `yes`       | Define if [Elasticsearch security](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html) is enabled or not |
-| `elasticsearch_username`         | `logstash_system`       | Username used to connect to the elastisearch servers  |
-| `elasticsearch_password`         | `l0gst4sHpAssw0rd,`       | password of the *elasticsearch_username*  |
+| `logstash_username`         | `logstash_system`       | Username used to connect to the elastisearch servers  |
+| `logstash_password`         | `l0gst4sHpAssw0rd,`       | password of the *logstash_username*  |
 | `elasticsearch_hosts`            | `[]`       | List of elasticsearch server names  |

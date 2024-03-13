@@ -20,8 +20,8 @@ elasticsearch_local_certs_dir: ~/very_secure_dir
 elasticsearch_ca_name: elasticsearch-ca.pem
 elasticsearch_https_enabled: yes
 elasticsearch_security_enabled: yes
-elasticsearch_username: logstash_system
-elasticsearch_password: l0gst4sHpAssw0rd,
+logstash_username: logstash_system
+logstash_password: l0gst4sHpAssw0rd,
 
 logstash_install_mode: http # local
 logstash_local_tar_path: ''
