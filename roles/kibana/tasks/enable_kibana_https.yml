@@ -6,7 +6,7 @@
 
 - block:
     - ansible.builtin.set_fact:
-        kibana_san_list_dns: "{% for name in kibana_san_names %}DNS:{{name}}{% if !loop.last %}, {% endif %}{% endfor %}"
+        kibana_san_list_dns: "{% for name in kibana_san_names %}DNS:{{name}}{% if not loop.last %}, {% endif %}{% endfor %}"
   
     - name: generate kibana https cert
       ansible.builtin.command: > 
