@@ -1,7 +1,7 @@
 ---
 
 - name: CA exists
-  stat:
+  ansible.builtin.stat:
     path: "{{  logstash_certs_dir }}/{{ elasticsearch_ca_name }}"
   register: elastic_ca_file
 
@@ -24,7 +24,7 @@
     group: "{{ logstash_group }}"
 
 - name: is logstash installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ logstash_extract_dir }}/logstash-{{ logstash_version }}"
   register: logstash_dir
 

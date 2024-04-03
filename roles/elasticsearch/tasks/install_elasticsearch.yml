@@ -19,7 +19,7 @@
     group: "{{ elasticsearch_group }}"
 
 - name: is elk installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
   register: elasticsearch_dir
 

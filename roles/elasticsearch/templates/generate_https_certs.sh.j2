@@ -8,4 +8,3 @@ HTTPS_P12_FILE={{ elasticsearch_certs_dir}}/http.p12
 if [ ! -f $HTTPS_P12_FILE ]; then
     cat /tmp/https_answer_file.txt | {{ elasticsearch_extract_dir }}/elasticsearch/bin/elasticsearch-certutil http
 fi
-

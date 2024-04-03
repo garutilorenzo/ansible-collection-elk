@@ -1,7 +1,7 @@
 ---
 
 - name: cert HTTPS exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ elasticsearch_certs_dir}}/http.p12"
   register: https_file
 
