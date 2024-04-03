@@ -1,7 +1,7 @@
 ---
 
 - name: CA exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ kibana_certs_dir }}/{{ elasticsearch_ca_name }}"
   register: elastic_ca_file
 
@@ -24,7 +24,7 @@
     group: "{{ kibana_group }}"
 
 - name: is kibana installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ kibana_extract_dir }}/kibana-{{ kibana_version }}"
   register: kibana_dir
 
@@ -66,8 +66,8 @@
     mode: u=rwX,g=rX,o-rwx
   loop:
     - "{{ kibana_conf_dir }}"
-    - "{{ kibana_certs_dir}}"
-    - "{{ kibana_pid_dir}}"
+    - "{{ kibana_certs_dir  }}"
+    - "{{ kibana_pid_dir  }}"
     - "{{ kibana_data_dir }}"
     - "{{ kibana_log_dir }}"
 
@@ -100,6 +100,11 @@
     - elasticsearch_https_enabled
     - not elastic_ca_file.stat.exists
 
+- include_tasks: 
+    file: enable_kibana_https.yml
+  when: 
+    - kibana_https_enabled
+
 - ansible.builtin.fail:
     msg: no elasticsearch_hosts specified
   when:
@@ -115,6 +120,8 @@
     owner: "{{ kibana_user }}"
     group: "{{ kibana_group }}"
     mode: 0644
+  notify:
+    - restart kibana
 
 - name: Render node.options file
   ansible.builtin.template:
