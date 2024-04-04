@@ -103,10 +103,10 @@ setup.kibana:
   host: "{{ kibana_url }}"
   username: "{{ beats_username }}"
   password: "{{ beats_password }}"
-  {% if kibana_https_enabled %}
+  {% if kibana_https_enabled -%}
   protocol: "https"
   ssl.enabled: true
-  {% if kibana_https_self_signed %}
+  {% if kibana_https_self_signed -%}
   ssl.verification_mode: none
   {% endif %}
   {% endif %}
