@@ -93,6 +93,15 @@ setup.kibana:
   # In case you specify and additional path, the scheme is required: http://localhost:5601/path
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
   host: "{{ kibana_url }}"
+  username: "{{ beats_username }}"
+  password: "{{ beats_password }}"
+  {% if kibana_https_enabled -%}
+  protocol: "https"
+  ssl.enabled: true
+  {% if kibana_https_self_signed -%}
+  ssl.verification_mode: none
+  {% endif %}
+  {% endif %}
 
   # Kibana Space ID
   # ID of the Kibana Space into which the dashboards should be loaded. By default,
@@ -131,8 +140,8 @@ output.elasticsearch:
   # Authentication credentials - either API key or username/password.
   #api_key: "id:api_key"
   {% if elasticsearch_security_enabled -%}
-  username: "{{ elasticsearch_username }}"
-  password: "{{ elasticsearch_password }}"
+  username: "{{ beats_username }}"
+  password: "{{ beats_password }}"
   {% endif %}
   
   {% if elasticsearch_https_enabled -%}

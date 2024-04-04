@@ -1,7 +1,7 @@
 ---
 
 - name: CA exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ filebeat_certs_dir }}/{{ elasticsearch_ca_name }}"
   register: elastic_ca_file
 
@@ -12,7 +12,7 @@
   register: unamem
 
 - name: is filebeat installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ beats_extract_dir }}/filebeat-{{ beats_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}"
   register: filebeat_dir
 
@@ -55,7 +55,7 @@
     group: yes
   delegate_to: "{{ inventory_hostname }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 - name: Copy elastic CA
@@ -98,7 +98,7 @@
   notify:
     - reload systemd
 
-- set_fact:
+- ansible.builtin.set_fact:
     setup_params: "{{ '--dashboards --index-management --pipelines' if setup_kibana_dashboards else '--pipelines --index-management' }}"
 
 - name: filebeat setup

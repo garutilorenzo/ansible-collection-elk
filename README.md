@@ -65,3 +65,8 @@ In the Vagrantfile you can inject your public ssh key directly in the authorized
 ## Tutorial 
 
 Full tutorial available [here](https://garutilorenzo.github.io/ansible-collection-elk/)
+
+## TODO
+
+* Add cleanup step
+* Add upgrade step

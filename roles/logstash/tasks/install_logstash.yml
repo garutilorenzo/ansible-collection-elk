@@ -1,7 +1,7 @@
 ---
 
 - name: CA exists
-  stat:
+  ansible.builtin.stat:
     path: "{{  logstash_certs_dir }}/{{ elasticsearch_ca_name }}"
   register: elastic_ca_file
 
@@ -24,7 +24,7 @@
     group: "{{ logstash_group }}"
 
 - name: is logstash installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ logstash_extract_dir }}/logstash-{{ logstash_version }}"
   register: logstash_dir
 
@@ -108,7 +108,7 @@
     - elasticsearch_https_enabled
     - not elastic_ca_file.stat.exists
 
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 

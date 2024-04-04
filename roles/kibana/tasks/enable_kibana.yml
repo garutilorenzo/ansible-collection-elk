@@ -1,6 +1,9 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     kibana_virtual_proto: "{{ 'https' if kibana_https_enabled else 'http' }}"
+
+- ansible.builtin.set_fact:
+    kibana_validate_certs: "{{ 'no' if kibana_https_self_signed else 'yes' }}"
 
 - name: enable and start kibana
   ansible.builtin.systemd:
@@ -13,7 +16,9 @@
     url: "{{ kibana_virtual_proto }}://localhost:5601"
     status_code: 200
     follow_redirects: safe
+    validate_certs: "{{ kibana_validate_certs }}"
   register: result
   until: result.status == 200
   retries: 30
   delay: 20
+  ignore_errors: "{{ ansible_check_mode }}"

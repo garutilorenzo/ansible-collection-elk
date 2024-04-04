@@ -8,6 +8,13 @@ kibana_certs_dir: /etc/kibana/certs
 kibana_pid_dir: /var/run/kibana
 kibana_data_dir: /kibana
 kibana_https_enabled: no
+kibana_https_self_signed: no
+kibana_cert_name: kibana-server
+kibana_cn_name: example.com
+kibana_san_names:
+  - localhost
+  - "{{ ansible_hostname|lower }}"
+kibana_local_certs_dir: ~/kibana_certs_dir
 kibana_old_space_mb: 1024
 
 kibana_install_mode: http # local
@@ -17,7 +24,7 @@ elasticsearch_local_certs_dir: ~/very_secure_dir
 elasticsearch_ca_name: elasticsearch-ca.pem
 elasticsearch_security_enabled: yes
 elasticsearch_https_enabled: yes
-elasticsearch_username: kibana_system
-elasticsearch_password: K1b4nap4sSw0rd
+kibana_username: kibana_system
+kibana_password: K1b4nap4sSw0rd
 
 elasticsearch_hosts: []

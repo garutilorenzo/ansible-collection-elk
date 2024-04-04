@@ -1,0 +1,43 @@
+---
+- name: Kibana https key file exists
+  ansible.builtin.stat:
+    path: "{{ kibana_certs_dir }}/{{ kibana_cert_name }}.key"
+  register: kibana_key_file
+
+- block:
+    - ansible.builtin.set_fact:
+        kibana_san_list_dns: "{% for name in kibana_san_names %}DNS:{{name}}{% if not loop.last %}, {% endif %}{% endfor %}"
+  
+    - name: generate kibana https cert
+      ansible.builtin.command: > 
+        openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes
+        -keyout {{ kibana_certs_dir }}/{{ kibana_cert_name }}.key -out {{ kibana_certs_dir }}/{{ kibana_cert_name }}.crt -subj "/CN={{ kibana_cn_name }}"
+        -addext "subjectAltName={{ kibana_san_list_dns }}, IP:127.0.0.1"
+
+    - name: Fix cert permission
+      ansible.builtin.file:
+        path: "{{ kibana_certs_dir }}/{{ kibana_cert_name }}.{{ item }}"
+        owner: "{{ kibana_user }}"
+        group: "{{ kibana_group }}"
+        mode: 0644
+      with_items:
+        - key
+        - crt
+  when: 
+    - not kibana_key_file.stat.exists
+    - kibana_https_self_signed
+
+- block:
+    - name: Copy kibana https key
+      ansible.builtin.copy:
+        src: "{{ kibana_local_certs_dir }}/{{ kibana_cert_name }}.{{ item }}"
+        dest: "{{ kibana_certs_dir }}/{{ kibana_cert_name }}.{{ item }}"
+        owner: "{{ kibana_user }}"
+        group: "{{ kibana_group }}"
+        mode: 0644
+      with_items:
+        - key
+        - crt
+  when: 
+    - not kibana_key_file.stat.exists
+    - not kibana_https_self_signed

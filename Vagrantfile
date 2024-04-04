@@ -13,10 +13,10 @@ SCRIPT
 # you're doing.
 Vagrant.configure("2") do |config|
   (0..NNODES - 1).each do |i|
-    config.vm.define "k8s-ubuntu-#{i}" do |node|
+    config.vm.define "elk-node-#{i}" do |node|
       #node.vm.box = "ubuntu/focal64"
       node.vm.box = "ubuntu/jammy64"
-      node.vm.hostname = "k8s-ubuntu-#{i}"
+      node.vm.hostname = "elk-node-#{i}"
       config.vm.provider "virtualbox" do |v|
           v.memory = 2048
           v.cpus = 2

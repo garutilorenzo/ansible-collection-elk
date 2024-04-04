@@ -19,11 +19,11 @@
     group: "{{ elasticsearch_group }}"
 
 - name: is elk installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ elasticsearch_extract_dir }}/elasticsearch-{{ elasticsearch_version }}"
   register: elasticsearch_dir
 
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 - name: "Check elasticsearch availability"
@@ -134,15 +134,29 @@
   notify:
     - reload systemd
 
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_ip_address: "{{ item }}"
-  when: "item | ansible.utils.ipaddr( elasticsearch_subnet )"
+  when:
+    - elasticsearch_subnet is defined
+    - "item | ansible.utils.ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_all_ipv4_addresses }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
+    elastic_ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+  when:
+    - elasticsearch_subnet is not defined
+
+- ansible.builtin.set_fact:
     elastic_iface: "{{ hostvars[inventory_hostname]['ansible_' + item ]['device'] }}"
-  when: "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ansible.utils.ipaddr( elasticsearch_subnet )"
+  when:
+    - elasticsearch_subnet is defined
+    - "hostvars[inventory_hostname]['ansible_' + item ].ipv4 is defined and hostvars[inventory_hostname]['ansible_' + item ]['ipv4']['address'] | ansible.utils.ipaddr( elasticsearch_subnet )"
   with_items: "{{ ansible_interfaces }}"
+
+- ansible.builtin.set_fact:
+    elastic_iface: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['interface'] }}"
+  when:
+    - elasticsearch_subnet is not defined
 
 - name: Render elasticsearch configuration file
   ansible.builtin.template:

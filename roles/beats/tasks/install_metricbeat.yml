@@ -1,7 +1,7 @@
 ---
 
 - name: CA exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ metricbeat_certs_dir }}/{{ elasticsearch_ca_name }}"
   register: elastic_ca_file
 
@@ -12,7 +12,7 @@
   register: unamem
 
 - name: is metricbeat installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ beats_extract_dir }}/metricbeat-{{ beats_version }}-{{ unames.stdout | lower }}-{{ unamem.stdout }}"
   register: metricbeat_dir
 
@@ -55,7 +55,7 @@
     group: yes
   delegate_to: "{{ inventory_hostname }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     elastic_virtual_proto: "{{ 'https' if elasticsearch_https_enabled else 'http' }}"
 
 - name: Copy elastic CA
@@ -91,7 +91,7 @@
   notify:
     - reload metricbeat
 
-#TODO
+# TODO
 # - name: Render metricbeat elasticsearch module file
 #   ansible.builtin.template:
 #     src: metricbeat/elasticsearch_module.yml.j2
@@ -111,7 +111,7 @@
   notify:
     - reload systemd
 
-- set_fact:
+- ansible.builtin.set_fact:
     setup_params: "{{ '--dashboards --index-management --pipelines' if setup_kibana_dashboards else '--pipelines --index-management' }}"
 
 - name: metricbeat setup
