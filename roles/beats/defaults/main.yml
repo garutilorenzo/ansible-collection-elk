@@ -34,6 +34,8 @@ heartbeat_number_of_replicas: 1
 
 setup_kibana_dashboards: no
 kibana_url: ''
+kibana_https_enabled: no
+kibana_https_self_signed: no
 
 elasticsearch_https_enabled: yes
 elasticsearch_security_enabled: yes
