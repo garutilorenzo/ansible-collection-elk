@@ -21,7 +21,7 @@ Setup and configure Kibana
 | `kibana_cn_name`       | `example.com`       | https CN (Common Name), used only when `kibana_https_self_signed` i set to `yes`  |
 | `kibana_san_names`       | `list(localhost, hostname)`       | List of SAN (Subject Alternative Name), used only when `kibana_https_self_signed` i set to `yes`   |
 | `kibana_local_certs_dir`       | `~/kibana_certs_dir`       | Local directory where the certificates are available, used only when `kibana_https_self_signed` i set to `no`. Certificates must be named `kibana_cert_name`.key and `kibana_cert_name`.crt  (Eg. kibana-server.key and kibana-server.crt )  |
-| `kibana_install_mode`        | `http`       | Download kibana tar form elastic website. If set to local set *kibana_local_tar_path*  to a local path where the tar was previously downloaded  |
+| `kibana_install_mode`        | `http`       | Download kibana tar form elastic website. If set to local set `kibana_local_tar_path`  to a local path where the tar was previously downloaded  |
 | `kibana_local_tar_path`          | `''`       | Local path kibana the elasticsearch tar  |
 | `elasticsearch_local_certs_dir`  | `~/very_secure_dir`       | Local directory where the Elasticsearch certificates are stored  |
 | `elasticsearch_ca_name`          | `elasticsearch-ca.pem`       | Elasticsearch CA name  |
