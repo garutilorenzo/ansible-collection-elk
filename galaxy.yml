@@ -1,6 +1,6 @@
 namespace: "garutilorenzo"
 name: "ansible_collection_elk"
-version: "1.0.1"
+version: "1.1.0"
 readme: "README.md"
 description: "Install and configure the ELK stack, elastic beats and the APM server"
 authors:
